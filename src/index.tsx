@@ -7,31 +7,17 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { ThemeProvider, Theme, createTheme } from "@mui/material";
+import { AppLoaderProvider } from "./ui/context/Loading";
+
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
-const theme: Partial<Theme> = createTheme({
-  palette: {
-    primary: {
-      main: "#f8aa19",
-      light: "#f8aa19",
-      dark: "#f8aa19",
-      contrastText: "#fff",
-    },
-    secondary: {
-      main: "#1a2a53",
-      light: "#1a2a53",
-      dark: "#1a2a53",
-      contrastText: "#fff",
-    },
-  },
-});
+
 root.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <App />
-    </ThemeProvider>
+        <AppLoaderProvider>
+          <App />
+        </AppLoaderProvider>
   </React.StrictMode>
 );
 
