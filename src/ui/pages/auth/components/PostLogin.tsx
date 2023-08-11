@@ -1,7 +1,7 @@
 import {FC} from "react";
 import {InputCode} from "../../../components/Code";
 import {faChevronLeft, faCheck, faClose} from "@fortawesome/free-solid-svg-icons"
-import {useFormValidation} from "../../../hooks/Validation";
+import {handleInputEvent, useFormValidation} from "../../../hooks/Validation";
 import * as yup from "yup";
 import {CountDownButton} from "../../../components/CountDown";
 import {PostLoginData} from "../../../../types/User";
@@ -43,7 +43,7 @@ export const AuthPagePostLoginForm: FC<Props> = ({
                     el código recibido a continuación y presione sobre verificar.
                 </Typography.Text>
                 <div className={"w-full flex flex-col justify-center items-center gap-4 my-4"}>
-                    <InputCode value={formData.code} digits={6} onChange={updateData}/>
+                    <InputCode value={formData.code} digits={6} onChange={handleInputEvent(updateData)}/>
                     {errors?.code ? <Alert message={errors.code} type={"error"} showIcon/> : null}
                     <Button
                         icon={<FontAwesomeIcon icon={faChevronLeft}/>}

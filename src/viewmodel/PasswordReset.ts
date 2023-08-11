@@ -13,6 +13,7 @@ export function usePasswordResetViewModel() {
   const [proceedChangeState, setProceedChangeState] =
     useState<AppState<boolean> | null>(null);
   async function validateToken(data: PasswordRecoveryValidationData) {
+    if(validationState?.loading) return
     setValidationState(TaskState.loading());
     try {
       await AuthRepository.validatePasswordRecoveryToken(data);

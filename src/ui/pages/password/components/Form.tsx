@@ -1,6 +1,6 @@
 import {FC} from "react";
 import * as yup from "yup";
-import {useFormValidation} from "../../../hooks/Validation";
+import {handleInputEvent, useFormValidation} from "../../../hooks/Validation";
 import {PasswordRecoveryRequestData} from "../../../../types/User";
 import {Button, Form, Input} from "antd";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -37,7 +37,7 @@ export const PasswordRecoveryPageForm: FC<Props> = ({onSubmit}) => {
                     id="email"
                     autoComplete="email"
                     autoFocus
-                    onChange={updateData}
+                    onChange={handleInputEvent(updateData)}
                     value={formData.email}
                     prefix={<FontAwesomeIcon icon={faAt}/>}
                 />

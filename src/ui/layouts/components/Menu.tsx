@@ -11,5 +11,5 @@ export const DashboardSiderMenu: FC = () => {
     return <Menu className={"h-full overflow-auto"} theme={"dark"} onSelect={(info) => {
         navigate(info.key)
     }} selectedKeys={[pathname]} mode="inline"
-                 items={AppRoutes.filter(it => it.path === "/dashboard")[0].children!!.filter(it => !it.info?.ignore).map(it => appRouteAsMenuItem(it))}/>
+                 items={AppRoutes.filter(it => it.path === "/dashboard")[0].children!!.filter(it => !it.info?.ignore).map(it => appRouteAsMenuItem(it)!!)}/>
 }

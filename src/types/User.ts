@@ -1,3 +1,6 @@
+import {Role} from "./Role";
+import {ActivityData} from "./App";
+
 export type User = {
   id: number;
   name: string;
@@ -9,10 +12,10 @@ export type User = {
   createdAt: Date;
   updatedAt: Date;
   birthDate?: Date;
-  role: Role
+  Role: Role
 };
 
-export type NewUserData = {
+type NewUserD = {
   name: string;
   lastname: string;
   dni: string;
@@ -24,11 +27,11 @@ export type NewUserData = {
   password: string
 }
 
-export type Role = {
-  id: string
-  label: string
-  description: string
+export type NewUserFormData = NewUserD & {
+  reason: string
 }
+
+export type NewUserData = ActivityData<NewUserD>
 
 export type LoginData = {
   email: string;

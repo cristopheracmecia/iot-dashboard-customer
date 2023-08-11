@@ -1,6 +1,6 @@
 import {FC} from "react";
 import * as yup from "yup";
-import {useFormValidation} from "../../../hooks/Validation";
+import {handleInputEvent, useFormValidation} from "../../../hooks/Validation";
 import {Button, Form, Input} from "antd";
 import {faCheck} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -44,7 +44,7 @@ export const PasswordRecoveryForm: FC<Props> = ({onSubmit}) => {
                     required
                     id="password"
                     autoFocus
-                    onChange={updateData}
+                    onChange={handleInputEvent(updateData)}
                     value={formData.password}
                 />
             </Form.Item>
@@ -53,7 +53,7 @@ export const PasswordRecoveryForm: FC<Props> = ({onSubmit}) => {
                 <Input.Password
                     required
                     id="passwordConfirmation"
-                    onChange={updateData}
+                    onChange={handleInputEvent(updateData)}
                     value={formData.passwordConfirmation}
                 />
             </Form.Item>

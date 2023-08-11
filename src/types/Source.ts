@@ -3,3 +3,8 @@ export type RemoteSourceResponse<T = any> = {
   message: string;
   data?: T;
 };
+
+export type UpdateResult <T = any> = {
+  old: T,
+  data: T
+}

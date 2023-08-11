@@ -6,10 +6,11 @@ import {DashboardSiderMenu} from "./Menu";
 
 type Props = {
     collapsed: boolean
+    isMobile: boolean
 }
-export const DashboardLayoutSiderContent: FC<Props> = ({collapsed}) => {
+export const DashboardLayoutSiderContent: FC<Props> = ({collapsed, isMobile}) => {
     return <Fragment>
-        {collapsed ? (
+        {collapsed || isMobile ? (
                 <Layout.Header className={"flex justify-center items-center w-full overflow-hidden p-0 py-3 m-0"}>
                     <img alt={"icon"} src={AcmeIcon} className={"h-fit w-fit object-contain max-h-full max-w-full"}/>
                 </Layout.Header>

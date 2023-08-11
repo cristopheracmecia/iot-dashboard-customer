@@ -7,8 +7,9 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {useUserListViewModel} from "../../../viewmodel/UserList";
 import {toast} from "react-toastify";
 import {useAppLoader} from "../../hooks/Loading";
-import {UserListTable} from "./components/Table";
 import {useNavigate} from "react-router-dom";
+import {UserListData} from "./components/Data";
+import {User} from "../../../types/User";
 
 export const DashboardUserListPage: FC = () => {
     const {fetchList, fetchState, userList, onFetchStateReceived} = useUserListViewModel()
@@ -16,7 +17,11 @@ export const DashboardUserListPage: FC = () => {
 
     const onNewUserClick = useCallback(() => {
         navigate("/dashboard/users/create")
-    }, [])
+    }, [navigate])
+
+    const onDataItemClick = useCallback((item: User) => {
+        navigate("/dashboard/users/" + item.id)
+    }, [navigate, userList])
     useAppLoader([fetchState])
 
     useEffect(() => {
@@ -27,16 +32,20 @@ export const DashboardUserListPage: FC = () => {
         if (!fetchState?.loading) {
             if (fetchState?.hasError) {
                 toast.error(fetchState?.error?.message)
+            } else {
+                console.log(userList)
             }
             onFetchStateReceived()
         }
     }, [fetchState])
 
-    return <DashboardSubpageContainer>
-        <DashboardSubpageHeader title={"Lista de Usuarios"} extra={<Button.Group>
+    return <DashboardSubpageContainer className={"w-full h-full overflow-hidden"}>
+        <DashboardSubpageHeader title={"Usuarios"} subtitle={userList?.length + " usuarios"} extra={<Button.Group>
             <Button type={"primary"} icon={<FontAwesomeIcon icon={faRefresh}/>} onClick={fetchList}>Actualizar</Button>
             <Button type={"dashed"} icon={<FontAwesomeIcon icon={faPlus}/>} onClick={onNewUserClick}>Nuevo</Button>
         </Button.Group>}/>
-        <UserListTable data={userList}/>
+        <div className={"w-full h-full overflow-y-auto"}>
+            <UserListData onItemClicked={onDataItemClick} data={userList}/>
+        </div>
     </DashboardSubpageContainer>
 }

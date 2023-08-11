@@ -2,15 +2,16 @@
  * @type {import("tailwindcss").Config.theme.screens}
  * */
 export const screens = {
-    sm: 640,
-    md: 768,
+    xs: 0,
+    sm: 480,
+    md: 640,
     lg: 1024,
     xl: 1280,
     '2xl': 1536,
 }
 
 export function isXs(bp: keyof typeof screens | undefined) {
-    return !!bp && screens[bp] === undefined
+    return !!bp && screens[bp] === screens.xs
 }
 
 export function isSm(bp: keyof typeof screens | undefined) {

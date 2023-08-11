@@ -71,7 +71,7 @@ export const AuthPage: FC<Props> = ({}) => {
               setPostLoginEnabled(false);
             }}
             onSubmit={(data) => {
-              verificateCode(data);
+              void verificateCode(data);
             }}
             onResend={resendCode}
           />

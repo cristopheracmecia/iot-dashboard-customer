@@ -2,7 +2,7 @@ import {FC, useEffect, useState} from "react";
 import {Button, Avatar, Typography, Form, Input, Checkbox} from "antd"
 import AcmeIcon from "../../../../assets/AICON.png";
 import * as yup from "yup";
-import {useFormValidation} from "../../../hooks/Validation";
+import {handleInputEvent, useFormValidation} from "../../../hooks/Validation";
 import {LoginData} from "../../../../types/User";
 import useCookie from "react-use-cookie";
 import {Link as RouterLink} from "react-router-dom";
@@ -57,12 +57,12 @@ export const AuthPageForm: FC<Props> = ({onSubmit}) => {
                                help={errors.email}>
                         <Input allowClear prefix={<FontAwesomeIcon icon={faAt}/>} id={"email"}
                                placeholder={"Correo Electrónico"} value={formData.email}
-                               onChange={updateData}/>
+                               onChange={handleInputEvent(updateData)}/>
                     </Form.Item>
                     <Form.Item label={"Contraseña"} validateStatus={errors.password ? "error" : "validating"}
                                help={errors.password}>
                         <Input.Password allowClear id={"password"} placeholder={"Contraseña"} value={formData.password}
-                                        onChange={updateData}/>
+                                        onChange={handleInputEvent(updateData)}/>
                     </Form.Item>
 
                     <Form.Item>

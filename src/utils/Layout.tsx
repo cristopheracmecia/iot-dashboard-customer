@@ -8,15 +8,25 @@ type BreadcrumbItem = Required<BreadcrumbProps>['items'][number]
 
 export function appRouteAsMenuItem(
     route: AppRoute
-): MenuItem {
+): MenuItem | undefined {
     const {
         path,
         children,
         info,
     } = route
-    return ({
-        key: path || "/", icon: info?.icon, label: info?.label, children: children?.map(it => appRouteAsMenuItem(it))
-    });
+    if (info?.ignore) return undefined
+    const cRoutes: Array<AppRoute | undefined> | undefined = children ? children.filter(it => !!it && !it.info?.ignore) : undefined
+    const nChildren = (cRoutes ? cRoutes.map(it => it ? appRouteAsMenuItem(it) : undefined).filter(it => !!it) : undefined) as Array<MenuItem> | undefined
+    if (!!nChildren && nChildren.length >= 1) {
+        return ({
+            key: path || "/", icon: info?.icon, label: info?.label, children: nChildren
+        });
+    } else {
+        return ({
+            key: path || "/", icon: info?.icon, label: info?.label,
+        });
+    }
+
 }
 
 export function appRouteAsBreadcrumbItem(

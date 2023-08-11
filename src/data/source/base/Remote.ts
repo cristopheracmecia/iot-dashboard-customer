@@ -15,7 +15,7 @@ export class BaseRemoteSource {
                 throw new Error(response.message);
             }
         }
-        throw new Error(error.message);
+        throw error;
     }
 
     static checkResponseCredentials(response: AxiosResponse<any, any>) {

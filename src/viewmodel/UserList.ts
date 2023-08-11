@@ -13,11 +13,11 @@ export function useUserListViewModel() {
         setFetchState(TaskState.loading());
         try {
             const users = await UserRepository.getUserList()
-            if (users.ok) {
-                setUserList(users.data!!)
+            if (users!.ok) {
+                setUserList(users!.data!!)
                 setFetchState(TaskState.success(true))
             } else {
-                setFetchState(TaskState.error(new Error(users.message)))
+                setFetchState(TaskState.error(new Error(users!.message)))
             }
         } catch (e: any) {
             setFetchState(TaskState.error(e));
