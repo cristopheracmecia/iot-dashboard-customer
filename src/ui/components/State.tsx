@@ -8,7 +8,7 @@ type Props = PropsWithChildren<{
     description: string
     animation?: unknown
 }>
-export const AppState: FC<Props> = ({description, children, title = "Lista vacía", animation = animationData}) => {
+export const AppStateComponent: FC<Props> = ({description, children, title = "Lista vacía", animation = animationData}) => {
     const {View} = useLottie({
         loop: true, animationData: animation, style: {
             width: 200,

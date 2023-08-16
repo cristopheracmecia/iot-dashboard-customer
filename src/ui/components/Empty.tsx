@@ -1,6 +1,6 @@
 import {FC, PropsWithChildren} from "react";
 import animationData from "../../assets/animations/animation_empty.json";
-import {AppState} from "./State";
+import {AppStateComponent} from "./State";
 
 type Props = PropsWithChildren<{
     title?: string
@@ -8,5 +8,5 @@ type Props = PropsWithChildren<{
     animation?: unknown
 }>
 export const EmptyData: FC<Props> = ({title = "Lista vacía", animation = animationData, ...props}) => {
-    return <AppState title={title} animation={animation} {...props}/>
+    return <AppStateComponent title={title} animation={animation} {...props}/>
 }

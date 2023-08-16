@@ -8,17 +8,20 @@ import "@fontsource/roboto/700.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { AppLoaderProvider } from "./ui/context/Loading";
+import {AppBreakpointsProvider} from "./ui/context/Breakpoint";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 
 root.render(
-  <React.StrictMode>
-        <AppLoaderProvider>
-          <App />
-        </AppLoaderProvider>
-  </React.StrictMode>
+  // <React.StrictMode>
+        <AppBreakpointsProvider>
+            <AppLoaderProvider>
+                <App />
+            </AppLoaderProvider>
+        </AppBreakpointsProvider>
+  // </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

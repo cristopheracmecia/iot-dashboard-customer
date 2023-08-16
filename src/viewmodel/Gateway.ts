@@ -1,18 +1,26 @@
 import {useState} from "react";
 import {AppState, TaskState} from "../data/domain/State";
-import {useLoaderData} from "react-router-dom";
 import {NewGatewayFormData, UpdateGatewayFormData, Gateway} from "../types/Gateway";
 import {GatewayRepository} from "../data/repository/Gateway";
 
 export function useGatewayViewModel() {
-    const initialGateway = useLoaderData() as Gateway | null
     const [fetchListState, setFetchListState] = useState<AppState<boolean> | null>(null)
     const [gatewayList, setGatewayList] = useState<Gateway[]    | null>(null)
     const [createGatewayState, setCreateGatewayState] = useState<AppState<boolean> | null>(null)
     const [updateGatewayState, setUpdateGatewayState] = useState<AppState<boolean> | null>(null)
     const [fetchGatewayState, setFetchGatewayState] = useState<AppState<boolean> | null>(null)
-    const [gateway, setGateway] = useState<Gateway | null>(initialGateway)
-    async function fetchList(id: number | undefined) {
+    const [vehicleGateway, setVehicleGateway] = useState<Array<Gateway> | null>(null)
+    const [gateway, setGateway] = useState<Gateway | null>(null)
+    const [addEvent, setAddEvent] = useState<boolean | null>(null)
+
+    function requestAddEvent() {
+        setAddEvent(true)
+    }
+
+    function onAddEventComplete() {
+        setAddEvent(null)
+    }
+    async function fetchList(id: number | undefined = undefined) {
         if(fetchListState?.loading) return
         setFetchListState(TaskState.loading())
         try {
@@ -67,6 +75,23 @@ export function useGatewayViewModel() {
         }
     }
 
+
+    async function assignVehicleGateway(gatewayId: number, data: UpdateGatewayFormData) {
+        if(updateGatewayState?.loading) return
+        setUpdateGatewayState(TaskState.loading())
+        try {
+            const updateGateway = await GatewayRepository.updateGateway(gatewayId, data)
+            if(updateGateway.ok) {
+                setUpdateGatewayState(TaskState.success(true))
+                const newList = gatewayList?.filter(c => c.id !== updateGateway.data!!.old.id) ?? []
+                setGatewayList([...newList, updateGateway.data!!.data])
+            } else {
+                setUpdateGatewayState(TaskState.error(new Error(updateGateway.message!!)))
+            }
+        } catch (e : any) {
+            setUpdateGatewayState(TaskState.error(e))
+        }
+    }
     function onUpdateGatewayStateReceived() {
         setUpdateGatewayState(null)
     }
@@ -80,6 +105,22 @@ export function useGatewayViewModel() {
                 setGateway(customer.data!!)
             } else {
                 setFetchGatewayState(TaskState.error(new Error(customer.message!!)))
+            }
+        } catch (e : any) {
+            setFetchGatewayState(TaskState.error(e))
+        }
+    }
+
+    async function fetchVehicleGateway(vehicleId: number) {
+        if(fetchGatewayState?.loading) return
+        setFetchGatewayState(TaskState.loading())
+        try {
+            const gateway = await GatewayRepository.getGatewayList(vehicleId)
+            if(gateway.ok) {
+                setFetchGatewayState(TaskState.success(true))
+                setVehicleGateway(gateway.data!!)
+            } else {
+                setFetchGatewayState(TaskState.error(new Error(gateway.message!!)))
             }
         } catch (e : any) {
             setFetchGatewayState(TaskState.error(e))
@@ -104,6 +145,12 @@ export function useGatewayViewModel() {
         fetchGatewayState,
         fetchGateway,
         onFetchGatewayStateReceived,
-        gateway
+        fetchVehicleGateway,
+        gateway,
+        addEvent,
+        requestAddEvent,
+        onAddEventComplete,
+        vehicleGateway,
+        assignVehicleGateway
     }
 }

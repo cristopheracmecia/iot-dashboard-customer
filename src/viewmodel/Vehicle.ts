@@ -1,17 +1,15 @@
 import {useState} from "react";
 import {AppState, TaskState} from "../data/domain/State";
-import {useLoaderData} from "react-router-dom";
 import {NewVehicleFormData, UpdateVehicleFormData, Vehicle} from "../types/Vehicle";
 import {VehicleRepository} from "../data/repository/Vehicle";
 
 export function useVehicleViewModel() {
-    const initialVehicle = useLoaderData() as Vehicle | null
     const [fetchListState, setFetchListState] = useState<AppState<boolean> | null>(null)
     const [vehicleList, setVehicleList] = useState<Vehicle[]    | null>(null)
     const [createVehicleState, setCreateVehicleState] = useState<AppState<boolean> | null>(null)
     const [updateVehicleState, setUpdateVehicleState] = useState<AppState<boolean> | null>(null)
     const [fetchVehicleState, setFetchVehicleState] = useState<AppState<boolean> | null>(null)
-    const [vehicle, setVehicle] = useState<Vehicle | null>(initialVehicle)
+    const [vehicle, setVehicle] = useState<Vehicle | null>()
     async function fetchList(id: number | undefined) {
         if(fetchListState?.loading) return
         setFetchListState(TaskState.loading())
@@ -73,6 +71,7 @@ export function useVehicleViewModel() {
 
     async function fetchVehicle(id: number) {
         if(fetchVehicleState?.loading) return
+        setFetchVehicleState(TaskState.loading())
         try {
             const customer = await VehicleRepository.getVehicle(id)
             if(customer.ok) {
@@ -104,6 +103,6 @@ export function useVehicleViewModel() {
         fetchVehicleState,
         fetchVehicle,
         onFetchVehicleStateReceived,
-        vehicle
+        vehicle,
     }
 }

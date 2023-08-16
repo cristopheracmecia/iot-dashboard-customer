@@ -3,8 +3,8 @@ import {NewGatewayFormData, UpdateGatewayFormData} from "../../types/Gateway";
 import {omit} from "lodash"
 
 export class GatewayRepository {
-    static async getGatewayList(customerID: number | undefined) {
-        return await RemoteGatewaySource.getAllGateways(customerID)
+    static async getGatewayList(vehicleId: number | undefined = undefined) {
+        return await RemoteGatewaySource.getAllGateways(vehicleId)
     }
 
     static async createGateway(data: NewGatewayFormData) {

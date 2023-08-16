@@ -36,9 +36,7 @@ import {DashboardDeviceCreatePage} from "../ui/dashboard/device_create/DeviceCre
 import {DashboardOverviewPage} from "../ui/dashboard/overview/DashboardOverview";
 import {DashboardGatewayListPage} from "../ui/dashboard/gateway_list/GatewayList";
 import {DashboardGatewayCreatePage} from "../ui/dashboard/gateway_create/GatewayCreate";
-import {VehicleRepository} from "../data/repository/Vehicle";
 import {Button, Result} from "antd";
-import {EmptyData} from "../ui/components/Empty";
 import {DashboardVehiclePage} from "../ui/dashboard/vehicle/Vehicle";
 import {LoadingError} from "../ui/components/LoadingError";
 
@@ -195,14 +193,10 @@ export const AppRoutes: AppRoute[] =
                         {
                             path: "/dashboard/vehicles/:id",
                             element: <DashboardVehiclePage />,
-                            errorElement: <LoadingError error={} />
+                            errorElement: <LoadingError />,
                             info: {
                                 label: "Vehículo",
                                 ignore: true
-                            },
-                            loader: async (c) => {
-                                const {id} = c.params
-
                             },
                         }
                     ]

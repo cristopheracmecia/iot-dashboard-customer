@@ -1,6 +1,6 @@
 import {FC, Fragment} from "react";
 import AcmeIcon from "../../../assets/AICON.png";
-import LogoAcmeWhite from "../../../assets/Logo-ACME-white.png";
+import LogoAcmeWhite from "../../../assets/Logo-ACME.png";
 import {Layout} from "antd"
 import {DashboardSiderMenu} from "./Menu";
 
@@ -15,9 +15,9 @@ export const DashboardLayoutSiderContent: FC<Props> = ({collapsed, isMobile}) =>
                     <img alt={"icon"} src={AcmeIcon} className={"h-fit w-fit object-contain max-h-full max-w-full"}/>
                 </Layout.Header>
             ) :
-            (<div className={"flex justify-center items-center"}>
-                <img alt={"logo"} src={LogoAcmeWhite} className={"px-10 py-10 h-fit w-fit object-contain max-h-full max-w-full"}/>
-            </div>)}
+            (<Layout.Header className={"flex justify-center items-center w-full overflow-hidden p-0 py-4 m-0"}>
+                <img alt={"icon"} src={LogoAcmeWhite} className={"h-fit w-fit object-contain max-h-full max-w-full"}/>
+            </Layout.Header>)}
         <DashboardSiderMenu/>
     </Fragment>
 }

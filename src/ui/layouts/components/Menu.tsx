@@ -8,7 +8,7 @@ import {AppRoutes} from "../../../utils/Routes";
 export const DashboardSiderMenu: FC = () => {
     const {pathname} = useLocation()
     const navigate = useNavigate()
-    return <Menu className={"h-full overflow-auto"} theme={"dark"} onSelect={(info) => {
+    return <Menu className={"h-full overflow-auto"} theme={"light"} onSelect={(info) => {
         navigate(info.key)
     }} selectedKeys={[pathname]} mode="inline"
                  items={AppRoutes.filter(it => it.path === "/dashboard")[0].children!!.filter(it => !it.info?.ignore).map(it => appRouteAsMenuItem(it)!!)}/>

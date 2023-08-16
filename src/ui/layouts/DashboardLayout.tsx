@@ -19,7 +19,7 @@ export const DashboardLayout: FC = () => {
                 setCollapsed(false)
             }} open={collapsed}>
                 <DashboardLayoutSiderContent isMobile={isMobile} collapsed={collapsed}/>
-            </Drawer> : <Sider collapsible collapsed={collapsed}
+            </Drawer> : <Sider theme={"light"} collapsible collapsed={collapsed}
                                onCollapse={(value) => setCollapsed(value)}>
                 <DashboardLayoutSiderContent isMobile={isMobile} collapsed={collapsed}/>
             </Sider>

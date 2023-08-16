@@ -13,10 +13,9 @@ export class RemoteGatewaySource extends BaseRemoteSource {
             throw this.parseError(e)
         }
     }
-
-    static async getAllGateways(customerId: number | undefined): Promise<RemoteSourceResponse<Gateway[]>> {
+    static async getAllGateways(vehicleId: number | undefined): Promise<RemoteSourceResponse<Gateway[]>> {
         try {
-            const gatewayList = await apiService.getWithAuth("/gateway/list", {id: customerId});
+            const gatewayList = await apiService.postWithAuth("/gateway/list", {id: vehicleId});
             this.checkResponseCredentials(gatewayList);
             return gatewayList.data as RemoteSourceResponse<Gateway[]>;
         } catch (e) {

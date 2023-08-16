@@ -62,9 +62,9 @@ export const DashboardLayoutHeader: FC<Props> = ({isMediumScreen, openDrawer}) =
                 </Fragment> : null
             }
             <div className={"ml-auto flex flex-row gap-2 text-neutral-500"}>
-                <Button size={"large"} shape={"round"} type={"text"} ghost={true}
+                <Button size={"middle"} shape={"round"} type={"text"} ghost={true}
                         icon={<FontAwesomeIcon icon={faUser}/>}/>
-                <Button size={"large"} shape={"round"} type={"text"} icon={<FontAwesomeIcon icon={faGear}/>}/>
+                <Button size={"middle"} shape={"round"} type={"text"} icon={<FontAwesomeIcon icon={faGear}/>}/>
             </div>
         </div>
     </Header> : <div className={"flex flex-col w-full"}>
