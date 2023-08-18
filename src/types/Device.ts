@@ -9,6 +9,8 @@ export type Device = {
     Unit: Unit
     updatedAt: string
     createdAt: string
+    schema: object
+    defaultKey: string
 }
 
 export type NewDeviceFormData = {

@@ -1,5 +1,5 @@
-import {Role} from "./Role";
-import {ActivityData} from "./App";
+import { Role } from "./Role";
+import { ActivityData } from "./App";
 
 export type User = {
   id: number;
@@ -12,7 +12,8 @@ export type User = {
   createdAt: Date;
   updatedAt: Date;
   birthDate?: Date;
-  Role: Role
+  Role: Role;
+  enabled: boolean;
 };
 
 type NewUserD = {
@@ -22,16 +23,31 @@ type NewUserD = {
   username: string;
   email?: string;
   corporateEmail: string;
-  birthDate ?: number;
-  roleId ?: number;
-  password: string
-}
+  birthDate?: number;
+  roleId?: number;
+  password: string;
+};
 
 export type NewUserFormData = NewUserD & {
-  reason: string
-}
+  reason: string;
+};
 
-export type NewUserData = ActivityData<NewUserD>
+export type UpdateUserFormData = {
+  name?: string;
+  lastname?: string;
+  dni?: string;
+  username?: string;
+  email?: string;
+  enabled?: boolean;
+  reason: string;
+};
+
+export type NewUserData = ActivityData<NewUserD>;
+
+export type UpdateUserData = ActivityData<
+  Omit<UpdateUserFormData, "reason">,
+  { id: number }
+>;
 
 export type LoginData = {
   email: string;

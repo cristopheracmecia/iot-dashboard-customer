@@ -11,7 +11,9 @@ export class RemoteDeviceDataSource extends BaseRemoteSource {
         dateEnd: Date,
         order: "ASC" | "DESC",
         limit: number | undefined = undefined
-    ): Promise<RemoteSourceResponse<Array<DeviceData>>> {
+    ): Promise<RemoteSourceResponse<{
+        [deviceKey: string] : Array<DeviceData>
+    }>> {
         try {
             const gateway = await apiService.postWithAuth("/device_data/list", {
                 gatewayKey,
