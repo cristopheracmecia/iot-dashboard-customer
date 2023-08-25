@@ -1,7 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { DashboardSubpageHeader } from "../../components/DashboardHeader";
-import { UserUpdateForm } from "./components/Form";
-import { useUserViewModel } from "../../../viewmodel/User";
+import { CustomerUpdateForm } from "./components/Form";
 import { DashboardStateContainer } from "../../components/DashboardStateContainer";
 import { AppLoader } from "../../components/AppLoader";
 import { EmptyData } from "../../components/Empty";
@@ -9,21 +8,22 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Form, Input, Modal, notification, Typography } from "antd";
 import { handleTextAreaEvent, useFormValidation } from "../../hooks/Validation";
 import * as Yup from "yup";
-import { User } from "../../../types/User";
-export const DashboardUserUpdatePage: FC = () => {
+import { useCustomerViewModel } from "../../../viewmodel/Customer";
+import { Customer } from "../../../types/Customer";
+export const DashboardCustomerUpdatePage: FC = () => {
   const navigate = useNavigate();
   const {
-    user,
-    updateUser,
-    updateState,
-    onUpdateUserStateReceived,
-    onFetchUserStateReceived,
-    fetchUser,
-    fetchUserState,
-  } = useUserViewModel();
+    customer,
+    updateCustomer,
+    updateCustomerState,
+    onUpdateCustomerStateReceived,
+    onFetchCustomerStateReceived,
+    fetchCustomer,
+    fetchCustomerState,
+  } = useCustomerViewModel();
   const { id } = useParams();
   const [reasonVisible, setReasonVisible] = useState<boolean>(false);
-  const [toUpdateData, setToUpdateData] = useState<Partial<User>>();
+  const [toUpdateData, setToUpdateData] = useState<Partial<Customer>>();
   const { updateData, formData, errors, valid } = useFormValidation<{
     reason: string;
   }>(
@@ -37,72 +37,75 @@ export const DashboardUserUpdatePage: FC = () => {
     { reason: "" },
   );
   useEffect(() => {
-    void fetchUser(Number(id));
+    void fetchCustomer(Number(id));
   }, []);
 
-  useEffect(() => {
-    if (!!fetchUserState && !fetchUserState.loading) {
-      if (fetchUserState.hasError) {
-        notification.error({
-          message:
-            fetchUserState.error?.message || "Error al obtener el usuario",
-        });
-      }
-      onFetchUserStateReceived();
-    }
-  }, [fetchUserState]);
+  useEffect(() => {}, [updateCustomerState]);
 
   useEffect(() => {
-    if (!!updateState && !updateState.loading) {
-      if (updateState.hasError) {
+    if (!!fetchCustomerState && !fetchCustomerState.loading) {
+      if (fetchCustomerState.hasError) {
         notification.error({
           message:
-            updateState.error?.message || "Error al actualizar el usuario",
+            fetchCustomerState.error?.message || "Error al obtener el cliente",
+        });
+      }
+      onFetchCustomerStateReceived();
+    }
+  }, [fetchCustomerState]);
+
+  useEffect(() => {
+    if (!!updateCustomerState && !updateCustomerState.loading) {
+      if (updateCustomerState.hasError) {
+        notification.error({
+          message:
+            updateCustomerState.error?.message ||
+            "Error al actualizar el cliente",
         });
       } else {
         notification.success({
-          message: "Usuario actualizado con éxito",
+          message: "Cliente actualizado con éxito",
         });
         navigate(-1);
       }
-      onUpdateUserStateReceived();
+      onUpdateCustomerStateReceived();
     }
-  }, [updateState]);
+  }, [updateCustomerState]);
 
   const onSubmitAll = () => {
     if (toUpdateData && formData && valid)
-      void updateUser({ ...toUpdateData, ...formData });
+      void updateCustomer({ ...toUpdateData, ...formData });
     else setReasonVisible(true);
   };
 
   return (
     <DashboardStateContainer
-      state={fetchUserState}
+      state={fetchCustomerState}
       className={"w-full h-full overflow-hidden"}
     >
       <AppLoader
         loading={
-          (!!fetchUserState && fetchUserState.loading) ||
-          (!!updateState && updateState.loading)
+          (!!fetchCustomerState && fetchCustomerState.loading) ||
+          (!!updateCustomerState && updateCustomerState.loading)
         }
       />
-      <DashboardSubpageHeader title={"Actualizar Usuario"} />
+      <DashboardSubpageHeader title={"Actualizar Cliente"} />
       <div
         className={
           "w-full h-full overflow-y-auto flex flex-row justify-center items-start"
         }
       >
         <div className={"max-w-full w-full p-2"}>
-          {user ? (
-            <UserUpdateForm
-              user={user}
+          {customer ? (
+            <CustomerUpdateForm
+              customer={customer}
               onFinish={(data) => {
                 setToUpdateData(data);
                 onSubmitAll();
               }}
             />
           ) : (
-            <EmptyData description={"Usuario no encontrado"} title={"Error"} />
+            <EmptyData description={"Cliente no encontrado"} title={"Error"} />
           )}
         </div>
       </div>
@@ -110,13 +113,13 @@ export const DashboardUserUpdatePage: FC = () => {
         <Modal
           open={true}
           onCancel={() => setReasonVisible(false)}
-          title={"Actualizar Usuario"}
+          title={"Actualizar Cliente"}
           destroyOnClose
           onOk={onSubmitAll}
         >
           <Typography.Paragraph>
             Por favor, detalle por qué está actualizando la información del
-            Usuario.
+            cliente.
           </Typography.Paragraph>
           <Form.Item
             label={"Detalles"}

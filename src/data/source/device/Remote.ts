@@ -6,7 +6,7 @@ import {Device, NewDevice, UpdateDevice} from "../../../types/Device";
 export class RemoteDeviceSource extends BaseRemoteSource {
     static async getDevice(id: number): Promise<RemoteSourceResponse<Device>> {
         try {
-            const device = await apiService.getWithAuth("/device/get", {id});
+            const device = await apiService.postWithAuth("/device/get", {id});
             this.checkResponseCredentials(device);
             return device.data as RemoteSourceResponse<Device>;
         } catch (e) {

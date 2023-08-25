@@ -21,6 +21,15 @@ export class RemoteAuthSource extends BaseRemoteSource {
         }
     }
 
+    static async logout(): Promise<RemoteSourceResponse | undefined> {
+        try {
+            const logoutResult = await apiService.postWithAuth("/user/logout");
+            return logoutResult.data as RemoteSourceResponse;
+        } catch (e) {
+            this.parseError(e);
+        }
+    }
+
     static async postLogin(
         data: PostLoginData
     ): Promise<RemoteSourceResponse | undefined> {

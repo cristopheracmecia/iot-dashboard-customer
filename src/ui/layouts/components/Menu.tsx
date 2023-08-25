@@ -18,7 +18,6 @@ export const DashboardSiderMenu: FC = () => {
     rPath && rPath.length > 0
       ? rPath[rPath.length - 1].path!!
       : determineCurrentRoute(pathname)!!.path!!;
-  console.log(rPath);
   return (
     <Menu
       className={"h-full overflow-auto"}

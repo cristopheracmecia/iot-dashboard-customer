@@ -9,8 +9,8 @@ export type Device = {
     Unit: Unit
     updatedAt: string
     createdAt: string
-    schema: object
-    defaultKey: string
+    schema: string
+    defaultKey?: string
 }
 
 export type NewDeviceFormData = {
@@ -18,6 +18,8 @@ export type NewDeviceFormData = {
     description?: string
     unitId?: number
     reason: string
+    schema: string
+    defaultKey?: string
 }
 
 export type UpdateDeviceFormData = {

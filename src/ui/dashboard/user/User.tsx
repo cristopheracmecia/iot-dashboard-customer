@@ -96,6 +96,9 @@ export const DashboardUserPage: FC = () => {
         <ProDescriptions.Item label={"Cargo"}>
           {user?.Role?.label || "No registrado."}
         </ProDescriptions.Item>
+        <ProDescriptions.Item label={"Estado"}>
+          {user?.enabled ? "Usuario habilitado" : "Usuario deshabilitado"}
+        </ProDescriptions.Item>
       </ProDescriptions>
     </DashboardStateContainer>
   );

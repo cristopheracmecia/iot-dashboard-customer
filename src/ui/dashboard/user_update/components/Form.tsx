@@ -1,10 +1,8 @@
 import React, { FC, useMemo } from "react";
 import { User } from "../../../../types/User";
-import { ProColumns, ProFieldValueType } from "@ant-design/pro-components";
 import * as yup from "yup";
 import {
   EntityUpdateForm,
-  EntityUpdateFormColumn,
   EntityUpdateFormData,
 } from "../../../components/EntityUpdateForm";
 
@@ -73,34 +71,20 @@ export const UserUpdateForm: FC<Props> = ({ user, onFinish }) => {
       },
       {
         key: "enabled",
-        label: "Habilitado",
+        label: "Estado",
         editable: true,
         valueType: "switch",
         value: user.enabled,
+        render: (node, item) => {
+          return item.valueType === "switch"
+            ? item.value === true
+              ? "Cuenta activa"
+              : "Cuenta inactiva"
+            : node;
+        },
       },
     ];
   }, [user]);
-
-  const columns: EntityUpdateFormColumn<User>[] = [
-    {
-      title: "Propiedad",
-      dataIndex: "label",
-      valueType: "text",
-      ellipsis: true,
-      editable: false,
-    },
-    {
-      title: "Actual",
-      key: "value",
-      dataIndex: "value",
-      valueType: (it) => {
-        return it.valueType;
-      },
-      render: (node, item, index) => {
-        return node;
-      },
-    },
-  ];
 
   return (
     <div className={"flex flex-col"}>
@@ -108,7 +92,6 @@ export const UserUpdateForm: FC<Props> = ({ user, onFinish }) => {
         onFinish={onFinish}
         initialData={initialItems}
         initialItem={user}
-        columns={columns}
         schema={formSchema}
       />
     </div>

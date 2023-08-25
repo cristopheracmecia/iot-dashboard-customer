@@ -7,24 +7,24 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { AppLoaderProvider } from "./ui/context/Loading";
+import {AppLoaderProvider} from "./ui/context/Loading";
 import {AppBreakpointsProvider} from "./ui/context/Breakpoint";
+import {DayNightThemeProvider} from "./ui/hooks/SwitchTheme";
 
 const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
+    document.getElementById("root") as HTMLElement
 );
 
 root.render(
-  // <React.StrictMode>
-        <AppBreakpointsProvider>
-            <AppLoaderProvider>
-                <App />
-            </AppLoaderProvider>
-        </AppBreakpointsProvider>
-  // </React.StrictMode>
+    // <React.StrictMode>
+    <AppBreakpointsProvider>
+        <AppLoaderProvider>
+            <DayNightThemeProvider>
+                <App/>
+            </DayNightThemeProvider>
+        </AppLoaderProvider>
+    </AppBreakpointsProvider>
+    // </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

@@ -14,7 +14,7 @@ export const DashboardStateContainer : FC<Props> = ({state, children, ...props})
         if(!!state) setLastState(state)
     }, [state])
 
-    return !!lastState?.hasError ? <AppStateComponent description={lastState.error?.message!!} /> : <DashboardSubpageContainer {...props} >
+    return !!lastState?.hasError ? <AppStateComponent title={"Ocurrió un error"} description={lastState.error?.message!!} /> : <DashboardSubpageContainer {...props} >
         {!!lastState?.loading ? <Skeleton active/> : children}
     </DashboardSubpageContainer>
 }

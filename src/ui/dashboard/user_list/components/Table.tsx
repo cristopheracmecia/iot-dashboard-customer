@@ -3,7 +3,7 @@ import {Table} from 'antd';
 import type {ColumnsType} from 'antd/es/table';
 import {User} from "../../../../types/User";
 import {UserListDataProps} from "./Data";
-import {Link} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 import {FilterConfirmProps} from "antd/es/table/interface";
 import {getColumnSearchProps} from "../../../components/TableColumnSearch";
 
@@ -56,9 +56,9 @@ export const UserListTable: FC<UserListDataProps> = ({data, onItemClicked}) => {
         }, {
             title: "Cargo",
             render: (value, record, _) => {
-                return <Link to={`/dashboard/users/permissions/${record.Role?.id}`}>
+                return <NavLink className={"dark:text-white"} to={`/dashboard/users/permissions/${record.Role?.id}`}>
                     {record.Role?.label}
-                </Link>
+                </NavLink>
             },
             sorter: (a, b) => a.name.localeCompare(b.name),
         }

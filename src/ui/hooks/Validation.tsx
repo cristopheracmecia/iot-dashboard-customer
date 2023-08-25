@@ -14,9 +14,11 @@ export function useFormValidation<T, E = { [K in keyof T]: string }>(
     if (!!initialData) validate(initialData);
   }, []);
   const updateData = (id: string, value: any) => {
-    const newData = { ...formData, [id]: value };
-    setFormData(newData);
-    validate(newData);
+    setFormData(old=>({ ...old, [id]: value }));
+    validate({
+        ...formData,
+        [id]: value
+    });
   };
 
   const updateAll = (newData: T) => {
@@ -24,7 +26,7 @@ export function useFormValidation<T, E = { [K in keyof T]: string }>(
     validate(newData);
   };
 
-  const validate = (data: T) => {
+  const validate = (data: T = formData) => {
     try {
       schema.validateSync(data, {
         recursive: true,

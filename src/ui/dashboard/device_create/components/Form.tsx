@@ -1,5 +1,5 @@
-import {FC} from "react";
-import {Button, Form, Input, Select} from "antd";
+import {FC, useCallback, useState} from "react";
+import {Button, Form, Input, Select, Typography} from "antd";
 import {
     handleInputEvent, handleTextAreaEvent,
     handleValueChange,
@@ -7,9 +7,10 @@ import {
 } from "../../../hooks/Validation";
 import * as yup from "yup";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faSave, faICursor, faUserGear, faKey} from "@fortawesome/free-solid-svg-icons";
+import {faSave, faICursor, faUserGear, faKey, faGear} from "@fortawesome/free-solid-svg-icons";
 import {NewDeviceFormData} from "../../../../types/Device";
 import {Unit} from "../../../../types/Unit";
+import {DeviceSchemaEditor} from "./SchemaEditor";
 
 type Props = {
     unitList?: Unit[] | null
@@ -22,12 +23,19 @@ export const DeviceCreateForm: FC<Props> = ({unitList, onFinish}) => {
         yup.object({
             key: yup.string().min(3, "Ingrese un identificador válido."),
             unitId: yup.number().required("Es necesario especificar una unidad para el dispositivo.."),
-            reason: yup.string().required("Especifique el motivo porque registra el dispositivo.").min(16, "Debe contener al menos 16 caracteres.")
+            reason: yup.string().required("Especifique el motivo porque registra el dispositivo.").min(16, "Debe contener al menos 16 caracteres."),
+            schema: yup.string().required("Especifique el esquema del dispositivo.").min(4, "Debe contener al menos 16 caracteres."),
         }),
         {
-            key: "", unitId: undefined, reason: ""
+            key: "", unitId: undefined, reason: "", schema: ""
         }
     );
+
+    const [schemaEditorVisible, setSchemaEditorVisible] = useState<boolean>(false)
+
+    const switchSchemaEditor = useCallback(() => {
+        setSchemaEditorVisible(old => !old)
+    }, [setSchemaEditorVisible])
 
     const onFormSubmit = () => {
         if (valid) onFinish(formData)
@@ -50,7 +58,8 @@ export const DeviceCreateForm: FC<Props> = ({unitList, onFinish}) => {
 
             <Form.Item label={"Unidad"} validateStatus={errors.unitId ? "error" : "validating"}
                        help={errors.unitId}>
-                <Select suffixIcon={<FontAwesomeIcon icon={faUserGear}/>} options={unitList || []} value={formData.unitId}
+                <Select suffixIcon={<FontAwesomeIcon icon={faUserGear}/>} options={unitList || []}
+                        value={formData.unitId}
                         fieldNames={{
                             label: "name", value: "id"
                         }} onSelect={handleValueChange(updateData, "unitId")}/>
@@ -64,6 +73,19 @@ export const DeviceCreateForm: FC<Props> = ({unitList, onFinish}) => {
                                 onChange={handleTextAreaEvent(updateData)} showCount/>
             </Form.Item>
         </Form>
+        <div className={"my-4"}>
+            <Typography.Title level={5}>Esquema de Propiedades</Typography.Title>
+            <DeviceSchemaEditor initialSchema={formData.schema} defaultKey={formData.defaultKey} showPreview={true}
+                                editorVisible={schemaEditorVisible} onCloseEditor={switchSchemaEditor}
+                                onFinish={(schema, dKey) => {
+                                    updateData("schema", schema)
+                                    updateData("defaultKey", dKey)
+                                    switchSchemaEditor()
+                                }}
+            />
+            <Button icon={<FontAwesomeIcon icon={faGear}/>} onClick={switchSchemaEditor}
+                    className={"w-full mt-4"}>Editar</Button>
+        </div>
         <div className={"w-full sticky bottom-0 left-0 bg-transparent"}>
             <Button onClick={onFormSubmit} type={"primary"} disabled={!valid}
                     icon={<FontAwesomeIcon icon={faSave}/>}>Registrar Dispositivo</Button>
