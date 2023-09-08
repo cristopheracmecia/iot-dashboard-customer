@@ -6,6 +6,7 @@ import {toast} from "react-toastify";
 import {AuthPagePostLoginForm} from "./components/PostLogin";
 import {useNavigate} from "react-router-dom";
 import {AppLoader} from "../../components/AppLoader";
+import {Layout} from "antd";
 
 type Props = {};
 
@@ -57,7 +58,7 @@ export const AuthPage: FC<Props> = ({}) => {
     }, [resendCodeState]);
 
     return (
-        <div
+        <Layout
             className="overflow-hidden md:grid md:grid-cols-2 w-screen h-screen"
         >
             <AppLoader
@@ -80,6 +81,6 @@ export const AuthPage: FC<Props> = ({}) => {
                     <AuthPageForm onSubmit={login}/>
                 )}
             </div>
-        </div>
+        </Layout>
     );
 };

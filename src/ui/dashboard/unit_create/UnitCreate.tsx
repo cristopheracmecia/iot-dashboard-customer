@@ -3,8 +3,8 @@ import {DashboardSubpageContainer} from "../../components/DashboardContainer";
 import {DashboardSubpageHeader} from "../../components/DashboardHeader";
 import {UnitCreateForm} from "./components/Form";
 import {toast} from "react-toastify";
-import {useAppLoader} from "../../hooks/Loading";
 import {useUnitViewModel} from "../../../viewmodel/Unit";
+import {AppLoader} from "../../components/AppLoader";
 
 type Props = {}
 export const DashboardUnitCreatePage: FC<Props> = ({}) => {
@@ -21,9 +21,8 @@ export const DashboardUnitCreatePage: FC<Props> = ({}) => {
         }
     }, [createUnitState])
 
-    useAppLoader([createUnitState])
-
     return <DashboardSubpageContainer className={"w-full h-full overflow-hidden"}>
+        <AppLoader loading={!!createUnitState && createUnitState.loading}/>
         <DashboardSubpageHeader title={"Nueva Unidad"}/>
         <div className={"w-full h-full overflow-y-auto flex flex-row justify-center items-start"}>
             <div className={"max-w-md w-full p-2"}>

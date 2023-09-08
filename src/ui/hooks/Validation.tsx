@@ -11,26 +11,31 @@ export function useFormValidation<T, E = { [K in keyof T]: string }>(
   const [valid, setIsValid] = useState(false);
 
   useEffect(() => {
-    if (!!initialData) validate(initialData);
+    if (!!initialData) void validate(initialData);
   }, []);
   const updateData = (id: string, value: any) => {
-    setFormData(old=>({ ...old, [id]: value }));
-    validate({
-        ...formData,
-        [id]: value
+    setFormData((old) => {
+      void validate({
+        ...old,
+        [id]: value,
+      });
+      return {
+        ...old,
+        [id]: value,
+      };
     });
   };
 
   const updateAll = (newData: T) => {
     setFormData(newData);
-    validate(newData);
+    void validate(newData);
   };
 
-  const validate = (data: T = formData) => {
+  const validate = async (data: T = formData) => {
     try {
-      schema.validateSync(data, {
-        recursive: true,
+      await schema.validate(data, {
         abortEarly: false,
+        recursive: true,
       });
       setIsValid(true);
       setErrors({} as any);
@@ -58,6 +63,7 @@ export function useFormValidation<T, E = { [K in keyof T]: string }>(
 }
 
 type CbType = (id: string, value: any) => void;
+
 export function handleInputEvent(cb1: CbType) {
   return (e: ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name || e.target.id;
@@ -71,6 +77,7 @@ export function handleTextAreaEvent(cb1: CbType) {
     cb1(name, e.target.value);
   };
 }
+
 export function handleValueChange(cb1: CbType, id: string) {
   return (value: any) => {
     cb1(id, value);

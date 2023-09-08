@@ -6,7 +6,7 @@ import {NewUnit, Unit, UpdateUnit} from "../../../types/Unit";
 export class RemoteUnitSource extends BaseRemoteSource {
     static async getUnit(id: number): Promise<RemoteSourceResponse<Unit>> {
         try {
-            const unit = await apiService.getWithAuth("/unit/get", {id});
+            const unit = await apiService.postWithAuth("/unit/get", {id});
             this.checkResponseCredentials(unit);
             return unit.data as RemoteSourceResponse<Unit>;
         } catch (e) {
@@ -24,7 +24,7 @@ export class RemoteUnitSource extends BaseRemoteSource {
         }
     }
 
-    static async createUnit(data: NewUnit) : Promise<RemoteSourceResponse<Unit>> {
+    static async createUnit(data: NewUnit): Promise<RemoteSourceResponse<Unit>> {
         try {
             const response = await apiService.postWithAuth("/unit/create", data)
             this.checkResponseCredentials(response)
@@ -34,7 +34,7 @@ export class RemoteUnitSource extends BaseRemoteSource {
         }
     }
 
-    static async updateUnit(updateData: UpdateUnit) : Promise<RemoteSourceResponse<UpdateResult<Unit>>> {
+    static async updateUnit(updateData: UpdateUnit): Promise<RemoteSourceResponse<UpdateResult<Unit>>> {
         try {
             const response = await apiService.putWithAuth("/unit/update", updateData)
             this.checkResponseCredentials(response)

@@ -33,6 +33,7 @@ export function useDeviceViewModel() {
 
     async function createDevice(device: NewDeviceFormData) {
         if(createDeviceState?.loading) return
+        setCreateDeviceState(TaskState.loading())
         try {
             const newCustomer = await DeviceRepository.createDevice(device)
             if(newCustomer.ok) {
@@ -52,6 +53,7 @@ export function useDeviceViewModel() {
 
     async function updateDevice(data: UpdateDeviceFormData) {
         if(updateDeviceState?.loading) return
+        setUpdateDeviceState(TaskState.loading())
         if(!device) setUpdateDeviceState(TaskState.error(new Error("No device data")))
         try {
             const updateDevice = await DeviceRepository.updateDevice(device!!.id, data)
@@ -73,6 +75,7 @@ export function useDeviceViewModel() {
 
     async function fetchDevice(id: number) {
         if(fetchDeviceState?.loading) return
+        setFetchDeviceState(TaskState.loading())
         try {
             const customer = await DeviceRepository.getDevice(id)
             if(customer.ok) {

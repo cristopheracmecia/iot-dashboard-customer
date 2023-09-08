@@ -1,7 +1,6 @@
 import {FC, useEffect} from "react";
 import {usePermissionsViewModel} from "../../../../viewmodel/Permissions";
 import {toast} from "react-toastify";
-import {useAppLoader} from "../../../hooks/Loading";
 import {DashboardSubpageContainer} from "../../../components/DashboardContainer";
 import {DashboardSubpageHeader} from "../../../components/DashboardHeader";
 import {Button} from "antd";
@@ -9,6 +8,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faRefresh, faAdd} from "@fortawesome/free-solid-svg-icons";
 import {RolePermissionList} from "./components/List";
 import {AddRolePermissionModal} from "./components/Modal";
+import {AppLoader} from "../../../components/AppLoader";
 
 export const DashboardRolePermissionPage: FC = () => {
     const {
@@ -66,9 +66,8 @@ export const DashboardRolePermissionPage: FC = () => {
         }
     }, [updateState])
 
-    useAppLoader([fetchState, updateState, fetchEntryListState])
-
     return <DashboardSubpageContainer className={"w-full h-full overflow-hidden"}>
+        <AppLoader loading={(!!fetchState && fetchState.loading) || (!!updateState && updateState.loading) || (!!fetchEntryListState && fetchEntryListState.loading)}/>
         <DashboardSubpageHeader title={`Permisos para ${rolePermission?.label}`} extra={<Button.Group>
             <Button type={"primary"} icon={<FontAwesomeIcon icon={faRefresh}/>}
                     onClick={fetchRolePermissions}>Actualizar</Button>

@@ -48,26 +48,11 @@ import {DashboardUserUpdatePage} from "../ui/dashboard/user_update/UserUpdate";
 import {DashboardCustomerPage} from "../ui/dashboard/customer/Customer";
 import {DashboardCustomerUpdatePage} from "../ui/dashboard/customer_update/CustomerUpdate";
 import {DashboardDeviceUpdatePage} from "../ui/dashboard/device_update/DeviceUpdate";
+import {DashboardUnitUpdatePage} from "../ui/dashboard/unit_update/UnitUpdate";
+import {DashboardGatewayUpdatePage} from "../ui/dashboard/gateway_update/GatewayUpdate";
+import {MainLayout} from "../ui/layouts/MainLayout";
 
 export const AppRoutes: AppRoute[] = [
-    {
-        path: "/auth",
-        errorElement: <AuthPage/>,
-        loader: async () => AuthRepository.getSession(),
-        element: <Navigate to={"/dashboard"}/>,
-    },
-    {
-        path: "/recover-password",
-        errorElement: <PasswordRecoveryPage/>,
-        loader: async () => AuthRepository.getSession(),
-        element: <Navigate to={"/dashboard"}/>,
-    },
-    {
-        path: "/password-recovery-validation",
-        errorElement: <PasswordRecoveryValidationPage/>,
-        loader: async () => AuthRepository.getSession(),
-        element: <Navigate to={"/dashboard"}/>,
-    },
     {
         path: "/dashboard",
         element: <DashboardLayout/>,
@@ -346,6 +331,22 @@ export const AppRoutes: AppRoute[] = [
                             ignore: true,
                         },
                     },
+                    {
+                        path: "/dashboard/units/:id",
+                        element: <DashboardUnitUpdatePage/>,
+                        info: {
+                            label: "Editar Unidad",
+                            ignore: true,
+                        },
+                        loader: async (c) => {
+                            const {id} = c.params;
+                            return await new Promise<boolean>((resolve, reject) => {
+                                if (isNaN(toNumber(id)))
+                                    reject(new Error("El id no es válido."));
+                                else resolve(false);
+                            });
+                        },
+                    }
                 ],
             },
             {
@@ -372,6 +373,22 @@ export const AppRoutes: AppRoute[] = [
                             ignore: true,
                         },
                     },
+                    {
+                        path: "/dashboard/gateways/:id",
+                        element: <DashboardGatewayUpdatePage/>,
+                        info: {
+                            label: "Editar Gateway",
+                            ignore: true,
+                        },
+                        loader: async (c) => {
+                            const {id} = c.params;
+                            return await new Promise<boolean>((resolve, reject) => {
+                                if (isNaN(toNumber(id)))
+                                    reject(new Error("El id no es válido."));
+                                else resolve(false);
+                            });
+                        },
+                    }
                 ],
             },
             {
@@ -428,23 +445,48 @@ export const AppRoutes: AppRoute[] = [
     },
     {
         path: "/",
-        element: <Navigate to={"/dashboard"}/>,
+        element: <MainLayout/>,
+        children: [
+            {
+                path: "/",
+                element: <Navigate to={"/dashboard"}/>,
+            },
+            {
+                path: "/auth",
+                errorElement: <AuthPage/>,
+                loader: async () => AuthRepository.getSession(),
+                element: <Navigate to={"/dashboard"}/>,
+            },
+            {
+                path: "/recover-password",
+                errorElement: <PasswordRecoveryPage/>,
+                loader: async () => AuthRepository.getSession(),
+                element: <Navigate to={"/dashboard"}/>,
+            },
+            {
+                path: "/password-recovery-validation",
+                errorElement: <PasswordRecoveryValidationPage/>,
+                loader: async () => AuthRepository.getSession(),
+                element: <Navigate to={"/dashboard"}/>,
+            },
+            {
+                path: "*",
+                element: (
+                    <Layout className={"w-full h-full"}>
+                        <Result
+                            status="404"
+                            title="404"
+                            subTitle="La página que intentas acceder no existe."
+                            extra={
+                                <Button type="primary">
+                                    <NavLink to={"/dashboard"}>Ir al Dashboard</NavLink>
+                                </Button>
+                            }
+                        />
+                    </Layout>
+                ),
+            },
+        ]
     },
-    {
-        path: "*",
-        element: (
-            <Layout className={"w-full h-full"}>
-                <Result
-                    status="404"
-                    title="404"
-                    subTitle="La página que intentas acceder no existe."
-                    extra={
-                        <Button type="primary">
-                            <NavLink to={"/dashboard"}>Ir al Dashboard</NavLink>
-                        </Button>
-                    }
-                />
-            </Layout>
-        ),
-    },
+
 ];

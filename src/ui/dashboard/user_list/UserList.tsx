@@ -6,10 +6,10 @@ import { faPlus, faRefresh } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useUserListViewModel } from "../../../viewmodel/UserList";
 import { toast } from "react-toastify";
-import { useAppLoader } from "../../hooks/Loading";
 import { useNavigate } from "react-router-dom";
 import { UserListData } from "./components/Data";
 import { User } from "../../../types/User";
+import { AppLoader } from "../../components/AppLoader";
 
 export const DashboardUserListPage: FC = () => {
   const { fetchList, fetchState, userList, onFetchStateReceived } =
@@ -26,7 +26,6 @@ export const DashboardUserListPage: FC = () => {
     },
     [navigate, userList],
   );
-  useAppLoader([fetchState]);
 
   useEffect(() => {
     void fetchList();
@@ -45,6 +44,7 @@ export const DashboardUserListPage: FC = () => {
 
   return (
     <DashboardSubpageContainer className={"w-full h-full overflow-hidden"}>
+      <AppLoader loading={!!fetchState && fetchState.loading} />
       <DashboardSubpageHeader
         title={"Usuarios"}
         subtitle={userList?.length + " usuarios"}

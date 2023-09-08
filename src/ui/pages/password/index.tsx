@@ -1,12 +1,12 @@
 import {FC, Fragment, useEffect, useState} from "react";
-import {useAppLoader} from "../../hooks/Loading";
 import {toast} from "react-toastify";
 import AcmeIcon from "../../../assets/AICON.png";
 import {PasswordRecoveryPageForm} from "./components/Form";
 import {useRecoveryRequestViewModel} from "../../../viewmodel/RecoverRequest";
-import {Avatar, Card, Typography} from "antd"
+import {Avatar, Card, Layout, Typography} from "antd"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEnvelopeCircleCheck} from "@fortawesome/free-solid-svg-icons"
+import {AppLoader} from "../../components/AppLoader";
 
 type Props = {};
 
@@ -14,8 +14,6 @@ export const PasswordRecoveryPage: FC<Props> = ({}) => {
     const [messageSent, setMessageSent] = useState<boolean>(false);
     const {sendRequest, requestState, onRequestStateReceived} =
         useRecoveryRequestViewModel();
-
-    useAppLoader([requestState]);
 
     useEffect(() => {
         if (!!requestState && !requestState.loading) {
@@ -29,13 +27,13 @@ export const PasswordRecoveryPage: FC<Props> = ({}) => {
     }, [requestState]);
 
     return (
-        <div
-
-            className="overflow-hidden bg-white lg:bg-neutral-200 w-full h-full flex justify-center lg:items-center"
+        <Layout
+            className="overflow-hidden w-full h-full flex justify-center lg:items-center"
         >
+            <AppLoader loading={!!requestState && requestState.loading}/>
             <Card bordered={false}>
                 <div
-                    className="lg:max-w-lg py-6 bg-white flex flex-col justify-center items-center">
+                    className="lg:max-w-lg py-6 flex flex-col justify-center items-center">
                     <Avatar size={64} icon={<img src={AcmeIcon} alt={"ACME"}/>} style={{background: "transparent"}}/>
 
                     {messageSent ? (
@@ -47,7 +45,7 @@ export const PasswordRecoveryPage: FC<Props> = ({}) => {
                                 Se ha enviado un correo electrónico detallando las instrucciones
                                 para restablecer su contraseña.
                             </Typography.Text>
-                            <Typography.Text type={"success"} className={"text-4xl"}>
+                            <Typography.Text className={"text-4xl text-amber-500"}>
                                 <FontAwesomeIcon icon={faEnvelopeCircleCheck} />
                             </Typography.Text>
                         </Fragment>
@@ -73,6 +71,6 @@ export const PasswordRecoveryPage: FC<Props> = ({}) => {
                 </div>
             </Card>
 
-        </div>
+        </Layout>
     );
 };

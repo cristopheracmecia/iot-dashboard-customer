@@ -7,23 +7,23 @@ import {UnitRepository} from "../data/repository/Unit";
 export function useUnitViewModel() {
     const initialUnit = useLoaderData() as Unit | null
     const [fetchListState, setFetchListState] = useState<AppState<boolean> | null>(null)
-    const [unitList, setUnitList] = useState<Unit[]    | null>(null)
+    const [unitList, setUnitList] = useState<Unit[] | null>(null)
     const [createUnitState, setCreateUnitState] = useState<AppState<boolean> | null>(null)
     const [updateUnitState, setUpdateUnitState] = useState<AppState<boolean> | null>(null)
     const [fetchUnitState, setFetchUnitState] = useState<AppState<boolean> | null>(null)
     const [unit, setUnit] = useState<Unit | null>(initialUnit)
+
     async function fetchList() {
-        if(fetchListState?.loading) return
+        if (fetchListState?.loading) return
         setFetchListState(TaskState.loading())
         try {
-           const list = await UnitRepository.getUnitList()
-           if(list.ok) {
-               setUnitList(list.data!!)
+            const list = await UnitRepository.getUnitList()
+            if (list.ok) {
+                setUnitList(list.data!!)
                 setFetchListState(TaskState.success(true))
-           }
-           else setFetchListState(TaskState.error(new Error(list.message!!)))
+            } else setFetchListState(TaskState.error(new Error(list.message!!)))
         } catch (error: any) {
-           setFetchListState(TaskState.error(error))
+            setFetchListState(TaskState.error(error))
         }
     }
 
@@ -32,10 +32,10 @@ export function useUnitViewModel() {
     }
 
     async function createUnit(data: NewUnitFormData) {
-        if(createUnitState?.loading) return
+        if (createUnitState?.loading) return
         try {
             const newCustomer = await UnitRepository.createUnit(data)
-            if(newCustomer.ok) {
+            if (newCustomer.ok) {
                 setCreateUnitState(TaskState.success(true))
                 setUnitList([...(unitList ?? []), newCustomer.data!!])
             } else {
@@ -51,18 +51,19 @@ export function useUnitViewModel() {
     }
 
     async function updateUnit(data: UpdateUnitFormData) {
-        if(updateUnitState?.loading) return
-        if(!unit) setUpdateUnitState(TaskState.error(new Error("No unit data")))
+        if (updateUnitState?.loading) return
+        setUpdateUnitState(TaskState.loading())
+        if (!unit) setUpdateUnitState(TaskState.error(new Error("No unit data")))
         try {
             const updateVehicle = await UnitRepository.updateUnit(unit!!.id, data)
-            if(updateVehicle.ok) {
+            if (updateVehicle.ok) {
                 setUpdateUnitState(TaskState.success(true))
                 const newList = unitList?.filter(c => c.id !== updateVehicle.data!!.old.id) ?? []
                 setUnitList([...newList, updateVehicle.data!!.data])
             } else {
                 setUpdateUnitState(TaskState.error(new Error(updateVehicle.message!!)))
             }
-        } catch (e : any) {
+        } catch (e: any) {
             setUpdateUnitState(TaskState.error(e))
         }
     }
@@ -72,21 +73,22 @@ export function useUnitViewModel() {
     }
 
     async function fetchUnit(id: number) {
-        if(fetchUnitState?.loading) return
+        if (fetchUnitState?.loading) return
+        setFetchUnitState(TaskState.loading())
         try {
             const customer = await UnitRepository.getUnit(id)
-            if(customer.ok) {
+            if (customer.ok) {
                 setFetchUnitState(TaskState.success(true))
                 setUnit(customer.data!!)
             } else {
                 setFetchUnitState(TaskState.error(new Error(customer.message!!)))
             }
-        } catch (e : any) {
+        } catch (e: any) {
             setFetchUnitState(TaskState.error(e))
         }
     }
 
-    function onFetchVehicleStateReceived() {
+    function onFetchUnitStateReceived() {
         setFetchUnitState(null)
     }
 
@@ -103,7 +105,7 @@ export function useUnitViewModel() {
         onUpdateUnitStateReceived,
         fetchUnitState,
         fetchUnit,
-        onFetchVehicleStateReceived,
+        onFetchUnitStateReceived,
         unit
     }
 }

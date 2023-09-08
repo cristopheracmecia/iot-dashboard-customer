@@ -6,12 +6,12 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlus, faRefresh} from "@fortawesome/free-solid-svg-icons";
 import {useRoleViewModel} from "../../../viewmodel/Role";
 import {toast} from "react-toastify";
-import {useAppLoader} from "../../hooks/Loading";
 import {UserRoleList} from "./components/List";
 import {Role} from "../../../types/Role";
 import {CreateRoleModal} from "./components/Modal";
 import {DeleteRoleModal} from "./components/DeleteModal";
 import {UpdateRoleModal} from "./components/UpdateModal";
+import {AppLoader} from "../../components/AppLoader";
 
 type Props = {}
 
@@ -108,9 +108,9 @@ export const DashboardUserRolesPage: FC<Props> = ({}) => {
         }
     }, [updateState])
 
-    useAppLoader([fetchListState, createState, updateState])
-
     return <DashboardSubpageContainer className={"w-full h-full overflow-hidden"}>
+        <AppLoader
+            loading={(!!fetchListState && fetchListState.loading) || (!!createState && createState.loading) || (!!updateState && updateState.loading)}/>
         {
             createEvent ?
                 <CreateRoleModal open={true} onFinish={createRole} onClose={onCreateEventCompleted}/> : null

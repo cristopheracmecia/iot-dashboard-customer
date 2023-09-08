@@ -39,6 +39,7 @@ export function useCustomerViewModel() {
 
   async function createCustomer(customer: NewCustomerFormData) {
     if (createCustomerState?.loading) return;
+    setCreateCustomerState(TaskState.loading());
     try {
       const newCustomer = await CustomerRepository.createCustomer(customer);
       if (newCustomer.ok) {
@@ -60,6 +61,7 @@ export function useCustomerViewModel() {
 
   async function updateCustomer(data: UpdateCustomerFormData) {
     if (updateCustomerState?.loading) return;
+    setUpdateCustomerState(TaskState.loading());
     if (!customer) {
       setUpdateCustomerState(
         TaskState.error(new Error("Cliente no encontrado.")),

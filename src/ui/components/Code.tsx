@@ -56,8 +56,7 @@ export const InputCode: FC<Props> = ({ digits, onChange, value }) => {
           renderInput={(props) => (
             <input
               {...props}
-                className={"shadow-none appearance-none outline-0 border border-neutral-300 border-solid rounded text-gray-700" +
-                    " focus:border-primary focus:outline-none"}
+                className={"shadow-none bg-white dark:bg-transparent appearance-none outline-0 border border-neutral-300 border-solid rounded text-gray-700 dark:text-neutral-200 focus:border-primary focus:outline-none"}
               style={{
                 ...props.style,
                 width: size,

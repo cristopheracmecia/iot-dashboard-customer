@@ -1,19 +1,17 @@
 import { FC } from "react";
-import { DeviceData } from "../../../../types/DeviceData";
-import { VehicleDevice } from "../../../../types/VehicleDevice";
+import { VehicleDeviceData } from "../../../../types/DeviceData";
 import { isEmpty } from "lodash";
 import { EmptyData } from "../../../components/Empty";
-import { Device } from "../../../../types/Device";
-import { Typography } from "antd";
+import { Card, Typography } from "antd";
 import { Line } from "@ant-design/plots";
 import { LineConfig } from "@ant-design/charts";
+import { formatDate } from "../../../../utils/Dates";
 
 type Props = {
-  deviceData?: { [key: string]: DeviceData[] };
-  devices: VehicleDevice[];
+  deviceData?: VehicleDeviceData[] | null;
 };
 
-export const TabLogsDataViewer: FC<Props> = ({ deviceData, devices }) => {
+export const TabLogsDataViewer: FC<Props> = ({ deviceData }) => {
   return !deviceData || isEmpty(deviceData) ? (
     <EmptyData
       description={
@@ -21,62 +19,65 @@ export const TabLogsDataViewer: FC<Props> = ({ deviceData, devices }) => {
       }
     ></EmptyData>
   ) : (
-    <ItemsRenderer deviceData={deviceData} devices={devices} />
+    <ItemsRenderer dataArray={deviceData} />
   );
 };
 
-const ItemsRenderer: FC<Props> = ({ deviceData, devices }) => {
-  const keys = Object.keys(deviceData!!);
-  const selectedDevices = keys.map(
-    (it) => devices.find((d) => d.Device.key === it)!!.Device,
-  );
+const ItemsRenderer: FC<{
+  dataArray: VehicleDeviceData[];
+}> = ({ dataArray }) => {
   return (
-    <div className={"w-full h-full overflow-x-hidden overflow-y-auto"}>
-      {keys.map((it, i) => (
-        <GraphicRenderer
-          deviceKey={it}
-          device={selectedDevices!![i]!!}
-          data={deviceData!![it]}
-          key={it}
-        />
+    <div
+      className={
+        "w-full h-full overflow-x-hidden overflow-y-auto grid grid-cols-2 gap-4"
+      }
+    >
+      {dataArray.map((it, i) => (
+        <GraphicRenderer data={dataArray[i]} key={`${it.device.key}-rep`} />
       ))}
     </div>
   );
 };
 
 const GraphicRenderer: FC<{
-  deviceKey: string;
-  device: Device;
-  data: DeviceData[];
-}> = ({ deviceKey, device, data }) => {
-  const graphicData = data.map((it) => {
+  data: VehicleDeviceData;
+}> = ({ data }) => {
+  const graphicData = data.data.map((it) => {
     return {
-      ...it,
+      date: it.createdAt,
       ...it.value,
     };
   });
+  const rangeStart = new Date(graphicData[0].date);
+  const rangeEnd = new Date(graphicData[graphicData.length - 1].date);
 
   const config: LineConfig = {
     data: graphicData,
     padding: "auto",
-    xField: "createdAt",
-    yField: "speed",
+    xField: "date",
+    yField: data.device.defaultKey,
     xAxis: {
       tickCount: 0,
     },
     slider: {
       start: 0.1,
       end: 0.5,
+      formatter: (v) => {
+        return formatDate(rangeStart, rangeEnd, v);
+      },
     },
+    color: "#1a2a53",
   };
 
   return (
-    <div className={"w-full h-full overflow-x-hidden overflow-y-auto"}>
-      <Typography.Title level={5}>{device.description}</Typography.Title>
-      <Typography.Text>{device.key}</Typography.Text>
-      <div style={{ height: 400 }}>
-        <Line {...config} height={400} />
+    <Card>
+      <div className={"w-full h-full border-2 border-black rounded"}>
+        <Typography.Title level={5}>{data.device.description}</Typography.Title>
+        <Typography.Text>{data.device.key}</Typography.Text>
+        <div style={{ height: 400 }}>
+          <Line {...config} height={400} />
+        </div>
       </div>
-    </div>
+    </Card>
   );
 };

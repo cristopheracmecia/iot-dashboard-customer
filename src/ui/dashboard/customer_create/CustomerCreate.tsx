@@ -3,8 +3,8 @@ import {DashboardSubpageContainer} from "../../components/DashboardContainer";
 import {DashboardSubpageHeader} from "../../components/DashboardHeader";
 import {CustomerCreateForm} from "./components/Form";
 import {toast} from "react-toastify";
-import {useAppLoader} from "../../hooks/Loading";
 import {useCustomerViewModel} from "../../../viewmodel/Customer";
+import {AppLoader} from "../../components/AppLoader";
 
 type Props = {}
 export const DashboardCustomerCreatePage: FC<Props> = ({}) => {
@@ -21,9 +21,8 @@ export const DashboardCustomerCreatePage: FC<Props> = ({}) => {
         }
     }, [createCustomerState])
 
-    useAppLoader([createCustomerState])
-
     return <DashboardSubpageContainer className={"w-full h-full overflow-hidden"}>
+        <AppLoader loading={!!createCustomerState && createCustomerState.loading}/>
         <DashboardSubpageHeader title={"Nuevo Cliente"} />
         <div className={"w-full h-full overflow-y-auto flex flex-row justify-center items-start"}>
             <div className={"max-w-md w-full p-2"}>

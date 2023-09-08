@@ -20,7 +20,6 @@ export const DashboardSiderMenu: FC = () => {
       : determineCurrentRoute(pathname)!!.path!!;
   return (
     <Menu
-      className={"h-full overflow-auto"}
       theme={"light"}
       onSelect={(info) => {
         navigate(info.key);

@@ -31,6 +31,7 @@ export function useVehicleViewModel() {
 
     async function createVehicle(vehicle: NewVehicleFormData) {
         if(createVehicleState?.loading) return
+        setCreateVehicleState(TaskState.loading())
         try {
             const newCustomer = await VehicleRepository.createVehicle(vehicle)
             if(newCustomer.ok) {
@@ -50,6 +51,7 @@ export function useVehicleViewModel() {
 
     async function updateVehicle(data: UpdateVehicleFormData) {
         if(updateVehicleState?.loading) return
+        setUpdateVehicleState(TaskState.loading())
         if(!vehicle) setUpdateVehicleState(TaskState.error(new Error("No vehicle data")))
         try {
             const updateVehicle = await VehicleRepository.updateVehicle(vehicle!!.id, data)

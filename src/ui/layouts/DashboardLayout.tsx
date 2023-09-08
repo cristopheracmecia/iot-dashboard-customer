@@ -1,4 +1,4 @@
-import {Drawer, Layout} from "antd"
+import {Drawer, Layout, Typography} from "antd"
 import {FC, useState} from "react";
 import {Outlet} from "react-router-dom";
 import {DashboardLayoutSiderContent} from "./components/Sider";
@@ -19,21 +19,21 @@ export const DashboardLayout: FC = () => {
                 setCollapsed(false)
             }} open={collapsed}>
                 <DashboardLayoutSiderContent isMobile={isMobile} collapsed={collapsed}/>
-            </Drawer> : <Sider theme={"light"} collapsible collapsed={collapsed}
+            </Drawer> : <Sider theme={"light"}  collapsible collapsed={collapsed}
                                onCollapse={(value) => setCollapsed(value)}>
                 <DashboardLayoutSiderContent isMobile={isMobile} collapsed={collapsed}/>
             </Sider>
         }
         <Layout className={"h-screen w-full overflow-hidden"}>
             <DashboardLayoutHeader isMediumScreen={!isMobile} openDrawer={() => setCollapsed(true)}/>
-            <Content className={"w-full h-full overflow-hidden"}>
+            <Content className={"w-full h-full overflow-hidden flex flex-col"}>
                 <Outlet/>
+                <Footer className={"flex place-content-center w-full bg-transparent py-1 m-0"}>
+                    <Typography.Text style={{padding: 0, margin: 0}} type={"secondary"}>
+                        2023 ACME & CIA. Todos los derechos reservados.
+                    </Typography.Text>
+                </Footer>
             </Content>
-            {/*<Footer className={"flex place-content-center w-full bg-neutral-100 py-1 m-0"}>*/}
-            {/*    <Typography.Text style={{padding: 0, margin: 0}} type={"secondary"}>*/}
-            {/*        2023 ACME & CIA. Todos los derechos reservados.*/}
-            {/*    </Typography.Text>*/}
-            {/*</Footer>*/}
         </Layout>
     </Layout>
 };

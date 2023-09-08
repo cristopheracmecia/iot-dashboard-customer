@@ -3,18 +3,18 @@ import {useSearchParams, NavLink as RouterLink} from "react-router-dom";
 import {
     Avatar,
     Card, Typography
-    , Spin
+    , Spin, Layout
 } from "antd";
 import AcmeIcon from "../../../assets/AICON.png";
 import {usePasswordResetViewModel} from "../../../viewmodel/PasswordReset";
 import {toast} from "react-toastify";
-import {useAppLoader} from "../../hooks/Loading";
 import {
     PasswordRecoveryForm,
     PasswordRecoveryFormData,
 } from "./components/Form";
 import {faCheck} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {AppLoader} from "../../components/AppLoader";
 
 export const PasswordRecoveryValidationPage: FC = () => {
     const [params] = useSearchParams();
@@ -71,16 +71,15 @@ export const PasswordRecoveryValidationPage: FC = () => {
         });
     }, []);
 
-    useAppLoader([proceedChangeState, validationState]);
-
     return (
-        <div
-
-            className="overflow-hidden bg-white lg:bg-neutral-200 w-full h-full flex justify-center lg:items-center"
+        <Layout
+            className="overflow-hidden w-full h-full flex justify-center lg:items-center"
         >
-            <Card bordered={false}>
+            <AppLoader loading={(!!proceedChangeState && proceedChangeState.loading) && (!!validationState && validationState.loading)}/>
+            <Card bordered={false} className="md:w-full md:max-w-lg"
+            >
                 <div
-                    className="lg:max-w-lg py-6 bg-white flex flex-col justify-center items-center">
+                    className="lg:max-w-lg py-6 flex flex-col justify-center items-center">
                     <Avatar size={64} icon={<img src={AcmeIcon} alt={"ACME"}/>} style={{background: "transparent"}}/>
                     {validationState?.loading || proceedChangeState?.loading ? (
                         <Spin/>
@@ -131,6 +130,6 @@ export const PasswordRecoveryValidationPage: FC = () => {
                     </Typography.Text>
                 </div>
             </Card>
-        </div>
+        </Layout>
     );
 };

@@ -5,11 +5,11 @@ import {Button} from "antd";
 import {faPlus, faRefresh} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {toast} from "react-toastify";
-import {useAppLoader} from "../../hooks/Loading";
 import {useNavigate, useParams} from "react-router-dom";
 import {VehicleListData} from "./components/Data";
 import {useVehicleViewModel} from "../../../viewmodel/Vehicle";
 import {Vehicle} from "../../../types/Vehicle";
+import {AppLoader} from "../../components/AppLoader";
 
 export const DashboardVehicleListPage: FC = () => {
     const params = useParams<Record<string, any>>()
@@ -32,7 +32,6 @@ export const DashboardVehicleListPage: FC = () => {
         navigate("/dashboard/vehicles/" + record.id)
 
     }, [navigate, vehicleList])
-    useAppLoader([fetchListState])
 
     useEffect(() => {
         void fetchVehicleList()
@@ -48,6 +47,7 @@ export const DashboardVehicleListPage: FC = () => {
     }, [fetchListState])
 
     return <DashboardSubpageContainer className={"w-full h-full overflow-hidden"}>
+        <AppLoader loading={!!fetchListState && fetchListState.loading}/>
         <DashboardSubpageHeader title={"Vehículos"} subtitle={`${vehicleList?.length} vehículos`} extra={<Button.Group>
             <Button type={"primary"} icon={<FontAwesomeIcon icon={faRefresh}/>}
                     onClick={fetchVehicleList}>Actualizar</Button>

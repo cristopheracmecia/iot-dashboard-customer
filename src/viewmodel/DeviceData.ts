@@ -1,14 +1,13 @@
 import { useState } from "react";
 import { AppState, TaskState } from "../data/domain/State";
 import { DeviceDataRepository } from "../data/repository/DeviceData";
-import { Gateway } from "../types/Gateway";
-import { DeviceData } from "../types/DeviceData";
+import { VehicleDeviceData } from "../types/DeviceData";
 
 export function useDeviceDataViewModel() {
   const [fetchState, setFetchState] = useState<AppState<boolean> | null>(null);
-  const [deviceData, setDeviceData] = useState<{
-    [deviceKey: string]: DeviceData[];
-  }>({});
+  const [deviceData, setDeviceData] = useState<Array<VehicleDeviceData> | null>(
+    null,
+  );
   const [fetchDataEvent, setFetchDataEvent] = useState<boolean | null>(null);
 
   async function fetchDeviceData(

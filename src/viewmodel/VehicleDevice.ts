@@ -10,16 +10,16 @@ export function useVehicleDeviceViewModel() {
     const [createVehicleDeviceState, setCreateVehicleDeviceState] = useState<AppState<boolean> | null>(null)
     const [addEvent, setAddEvent] = useState<boolean | null>(null)
     const [deleteEvent, setDeleteEvent] = useState<boolean | null>(null)
+
     async function fetchList(id: number) {
-        if(fetchListState?.loading) return
+        if (fetchListState?.loading) return
         setFetchListState(TaskState.loading())
         try {
             const list = await VehicleDeviceRepository.getVehicleDevices(id)
-            if(list.ok) {
+            if (list.ok) {
                 setVehicleDeviceList(list.data!!)
                 setFetchListState(TaskState.success(true))
-            }
-            else setFetchListState(TaskState.error(new Error(list.message!!)))
+            } else setFetchListState(TaskState.error(new Error(list.message!!)))
         } catch (error: any) {
             setFetchListState(TaskState.error(error))
         }
@@ -30,10 +30,11 @@ export function useVehicleDeviceViewModel() {
     }
 
     async function createVehicleDevice(vehicleDevice: NewVehicleDeviceFormData) {
-        if(createVehicleDeviceState?.loading) return
+        if (createVehicleDeviceState?.loading) return
+        setCreateVehicleDeviceState(TaskState.loading())
         try {
             const newCustomer = await VehicleDeviceRepository.createVehicleDevice(vehicleDevice)
-            if(newCustomer.ok) {
+            if (newCustomer.ok) {
                 setCreateVehicleDeviceState(TaskState.success(true))
                 setVehicleDeviceList([...(vehicleDeviceList ?? []), newCustomer.data!!])
             } else {
@@ -56,14 +57,14 @@ export function useVehicleDeviceViewModel() {
         setAddEvent(null)
     }
 
-   return ({
-       fetchListState,
-       fetchList,
-       onFetchListStateReceived,
-       vehicleDeviceList,
-       createVehicleDeviceState,
-       createVehicleDevice,
-       onCreateVehicleDeviceStateReceived,
-       addEvent, requestAddEvent, onAddEventCompleted
-   })
+    return ({
+        fetchListState,
+        fetchList,
+        onFetchListStateReceived,
+        vehicleDeviceList,
+        createVehicleDeviceState,
+        createVehicleDevice,
+        onCreateVehicleDeviceStateReceived,
+        addEvent, requestAddEvent, onAddEventCompleted
+    })
 }

@@ -1,3 +1,5 @@
+import { Device } from "./Device";
+
 export type DeviceData = {
   id: number;
   deviceKey: string;
@@ -5,4 +7,9 @@ export type DeviceData = {
   value: object;
   updatedAt: string;
   createdAt: string;
+};
+
+export type VehicleDeviceData = {
+  device: Device;
+  data: DeviceData[];
 };

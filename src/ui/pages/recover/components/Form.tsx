@@ -37,6 +37,7 @@ export const PasswordRecoveryForm: FC<Props> = ({onSubmit}) => {
             onFinish={(_) => {
                 if (valid) onSubmit(formData);
             }}
+            className={"w-full"}
         >
             <Form.Item label="Nueva contraseña" status={!!errors.password ? "error" : "validating"}
                        help={errors.password}>

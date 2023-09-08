@@ -5,11 +5,11 @@ import {Button} from "antd";
 import {faPlus, faRefresh} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {toast} from "react-toastify";
-import {useAppLoader} from "../../hooks/Loading";
 import {useNavigate} from "react-router-dom";
 import {UnitListData} from "./components/Data";
 import {useUnitViewModel} from "../../../viewmodel/Unit";
 import {Unit} from "../../../types/Unit";
+import {AppLoader} from "../../components/AppLoader";
 
 export const DashboardUnitListPage: FC = () => {
     const {
@@ -21,7 +21,6 @@ export const DashboardUnitListPage: FC = () => {
     const onNewUnitClick = useCallback(() => {
         navigate("/dashboard/units/create")
     }, [])
-    useAppLoader([fetchListState])
 
     useEffect(() => {
         void fetchList()
@@ -41,6 +40,7 @@ export const DashboardUnitListPage: FC = () => {
     }, [fetchListState])
 
     return <DashboardSubpageContainer className={"w-full h-full overflow-hidden"}>
+        <AppLoader loading={(!!fetchListState && fetchListState.loading)}/>
         <DashboardSubpageHeader title={"Unidades"} extra={<Button.Group>
             <Button type={"primary"} icon={<FontAwesomeIcon icon={faRefresh}/>}
                     onClick={fetchList}>Actualizar</Button>

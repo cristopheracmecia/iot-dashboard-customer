@@ -41,6 +41,7 @@ export function useGatewayViewModel() {
 
     async function createGateway(gateway: NewGatewayFormData) {
         if(createGatewayState?.loading) return
+        setCreateGatewayState(TaskState.loading())
         try {
             const newCustomer = await GatewayRepository.createGateway(gateway)
             if(newCustomer.ok) {
@@ -60,6 +61,7 @@ export function useGatewayViewModel() {
 
     async function updateGateway(data: UpdateGatewayFormData) {
         if(updateGatewayState?.loading) return
+        setUpdateGatewayState(TaskState.loading())
         if(!gateway) setUpdateGatewayState(TaskState.error(new Error("No gateway data")))
         try {
             const updateGateway = await GatewayRepository.updateGateway(gateway!!.id, data)
@@ -98,6 +100,7 @@ export function useGatewayViewModel() {
 
     async function fetchGateway(id: number) {
         if(fetchGatewayState?.loading) return
+        setFetchGatewayState(TaskState.loading())
         try {
             const customer = await GatewayRepository.getGateway(id)
             if(customer.ok) {

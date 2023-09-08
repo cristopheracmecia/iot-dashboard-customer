@@ -5,11 +5,11 @@ import {Button} from "antd";
 import {faPlus, faRefresh} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {toast} from "react-toastify";
-import {useAppLoader} from "../../hooks/Loading";
 import {useNavigate, useParams} from "react-router-dom";
 import {GatewayListData} from "./components/Data";
 import {useGatewayViewModel} from "../../../viewmodel/Gateway";
 import {Gateway} from "../../../types/Gateway";
+import {AppLoader} from "../../components/AppLoader";
 
 export const DashboardGatewayListPage: FC = () => {
     const params = useParams<Record<string, any>>()
@@ -32,7 +32,6 @@ export const DashboardGatewayListPage: FC = () => {
         navigate("/dashboard/gateways/" + record.id)
 
     }, [navigate, gatewayList])
-    useAppLoader([fetchListState])
 
     useEffect(() => {
         void fetchGatewayList()
@@ -48,6 +47,7 @@ export const DashboardGatewayListPage: FC = () => {
     }, [fetchListState])
 
     return <DashboardSubpageContainer className={"w-full h-full overflow-hidden"}>
+        <AppLoader loading={!!fetchListState && fetchListState.loading}/>
         <DashboardSubpageHeader title={"Gateways"} subtitle={`${gatewayList?.length} gateways`} extra={<Button.Group>
             <Button type={"primary"} icon={<FontAwesomeIcon icon={faRefresh}/>}
                     onClick={fetchGatewayList}>Actualizar</Button>

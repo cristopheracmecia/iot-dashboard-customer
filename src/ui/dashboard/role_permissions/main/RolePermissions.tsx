@@ -5,10 +5,10 @@ import {Button} from "antd";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faRefresh} from "@fortawesome/free-solid-svg-icons";
 import {toast} from "react-toastify";
-import {useAppLoader} from "../../../hooks/Loading";
 import {UserPermissionRoleList} from "./components/List";
 import {usePermissionsViewModel} from "../../../../viewmodel/Permissions";
 import {useNavigate} from "react-router-dom";
+import {AppLoader} from "../../../components/AppLoader";
 
 export const DashboardRolePermissionsListPage: FC = () => {
     const navigate = useNavigate()
@@ -33,9 +33,8 @@ export const DashboardRolePermissionsListPage: FC = () => {
         }
     }, [fetchListState])
 
-    useAppLoader([fetchListState])
-
     return <DashboardSubpageContainer className={"w-full h-full overflow-hidden"}>
+        <AppLoader loading={!!fetchListState && fetchListState.loading}/>
         <DashboardSubpageHeader title={"Permisos"} extra={<Button.Group>
             <Button type={"primary"} icon={<FontAwesomeIcon icon={faRefresh}/>} onClick={fetchList}>Actualizar</Button>
         </Button.Group>}/>

@@ -3,8 +3,8 @@ import {DashboardSubpageContainer} from "../../components/DashboardContainer";
 import {DashboardSubpageHeader} from "../../components/DashboardHeader";
 import {GatewayCreateForm} from "./components/Form";
 import {toast} from "react-toastify";
-import {useAppLoader} from "../../hooks/Loading";
 import {useGatewayViewModel} from "../../../viewmodel/Gateway";
+import {AppLoader} from "../../components/AppLoader";
 
 type Props = {}
 export const DashboardGatewayCreatePage: FC<Props> = ({}) => {
@@ -21,9 +21,8 @@ export const DashboardGatewayCreatePage: FC<Props> = ({}) => {
         }
     }, [createGatewayState])
 
-    useAppLoader([createGatewayState])
-
     return <DashboardSubpageContainer className={"w-full h-full overflow-hidden"}>
+        <AppLoader loading={!!createGatewayState && createGatewayState.loading}/>
         <DashboardSubpageHeader title={"Nuevo Gateway"} />
         <div className={"w-full h-full overflow-y-auto flex flex-row justify-center items-start"}>
             <div className={"max-w-md w-full p-2"}>

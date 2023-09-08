@@ -8,7 +8,7 @@ import {
     useRef,
     useState,
 } from "react";
-import {ButtonProps, Button, Spin, Typography, Progress} from "antd"
+import {ButtonProps, Button, Typography, Progress} from "antd"
 
 type Props = {
     onClick: () => void;

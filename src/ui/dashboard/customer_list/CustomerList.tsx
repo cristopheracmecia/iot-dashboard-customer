@@ -5,11 +5,11 @@ import { Button } from "antd";
 import { faPlus, faRefresh } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { toast } from "react-toastify";
-import { useAppLoader } from "../../hooks/Loading";
 import { useNavigate } from "react-router-dom";
 import { useCustomerViewModel } from "../../../viewmodel/Customer";
 import { CustomerListData } from "./components/Data";
 import { Customer } from "../../../types/Customer";
+import {AppLoader} from "../../components/AppLoader";
 
 export const DashboardCustomerListPage: FC = () => {
   const { fetchList, customerList, fetchListState, onFetchListStateReceived } =
@@ -26,7 +26,6 @@ export const DashboardCustomerListPage: FC = () => {
     },
     [navigate, customerList],
   );
-  useAppLoader([fetchListState]);
 
   useEffect(() => {
     void fetchList();
@@ -45,6 +44,7 @@ export const DashboardCustomerListPage: FC = () => {
 
   return (
     <DashboardSubpageContainer className={"w-full h-full overflow-hidden"}>
+      <AppLoader loading={!!fetchListState && fetchListState.loading}/>
       <DashboardSubpageHeader
         title={"Clientes"}
         subtitle={`${customerList?.length} clientes`}

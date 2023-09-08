@@ -6,7 +6,7 @@ import {Gateway, NewGateway, UpdateGateway} from "../../../types/Gateway";
 export class RemoteGatewaySource extends BaseRemoteSource {
     static async getGateway(id: number): Promise<RemoteSourceResponse<Gateway>> {
         try {
-            const gateway = await apiService.getWithAuth("/gateway/get", {id});
+            const gateway = await apiService.postWithAuth("/gateway/get", {id});
             this.checkResponseCredentials(gateway);
             return gateway.data as RemoteSourceResponse<Gateway>;
         } catch (e) {

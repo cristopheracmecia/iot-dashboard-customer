@@ -13,7 +13,7 @@ export const DashboardLayoutSiderContent: FC<Props> = ({
   isMobile,
 }) => {
   return (
-    <Fragment>
+    <div className={"w-full h-full overflow-hidden flex flex-col"}>
       {collapsed || isMobile ? (
         <Layout.Header
           className={
@@ -39,7 +39,9 @@ export const DashboardLayoutSiderContent: FC<Props> = ({
           />
         </Layout.Header>
       )}
-      <DashboardSiderMenu />
-    </Fragment>
+      <div className={"flex-1 overflow-x-hidden overflow-y-auto"}>
+        <DashboardSiderMenu />
+      </div>
+    </div>
   );
 };

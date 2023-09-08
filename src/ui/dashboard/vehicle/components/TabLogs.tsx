@@ -144,10 +144,7 @@ export const VehicleLogsTab: FC<Props> = ({ vehicle }) => {
                 >
                   Seleccionar datos
                 </Button>
-                <TabLogsDataViewer
-                  devices={vehicleDeviceList}
-                  deviceData={deviceData}
-                />
+                <TabLogsDataViewer deviceData={deviceData} />
               </div>
             </Fragment>
           )}
