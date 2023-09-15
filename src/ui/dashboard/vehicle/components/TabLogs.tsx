@@ -1,7 +1,7 @@
 import { Vehicle } from "../../../../types/Vehicle";
-import { FC, Fragment, useCallback, useEffect, useState } from "react";
+import { FC, Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { useVehicleDeviceViewModel } from "../../../../viewmodel/VehicleDevice";
-import { Button, notification } from "antd";
+import { Button, notification, Typography } from "antd";
 import { useDeviceDataViewModel } from "../../../../viewmodel/DeviceData";
 import { useGatewayViewModel } from "../../../../viewmodel/Gateway";
 import { AppLoader } from "../../../components/AppLoader";
@@ -11,6 +11,7 @@ import { TabLogsFetchModal, TabLogsModalFormData } from "./TabLogsFetchModal";
 import { EmptyData } from "../../../components/Empty";
 import dayjs, { Dayjs } from "dayjs";
 import { TabLogsDataViewer } from "./TabLogsDataViewer";
+import { FullscreenToggle } from "../../../components/Fullscreen";
 
 type Props = {
   vehicle: Vehicle;
@@ -39,10 +40,11 @@ export const VehicleLogsTab: FC<Props> = ({ vehicle }) => {
     vehicleGateway,
   } = useGatewayViewModel();
 
-  const [fetchInputData, setFetchInputData] = useState<TabLogsModalFormData>({
-    deviceKey: [],
-    dateRange: [dayjs().startOf("day"), dayjs().endOf("day")],
-  });
+  const divRef = useRef<HTMLDivElement>(null);
+
+  const [fetchInputData, setFetchInputData] = useState<
+    TabLogsModalFormData | undefined
+  >();
 
   useEffect(() => {
     void fetchList(vehicle.id);
@@ -100,11 +102,7 @@ export const VehicleLogsTab: FC<Props> = ({ vehicle }) => {
   );
 
   return (
-    <div
-      className={
-        "w-full h-full overflow-x-hidden overflow-y-auto flex flex-col justify-start items-start gap-2"
-      }
-    >
+    <div className={"w-full h-full overflow-x-hidden overflow-y-auto"}>
       <AppLoader
         loading={
           (!!fetchListState && fetchListState.loading) ||
@@ -125,17 +123,23 @@ export const VehicleLogsTab: FC<Props> = ({ vehicle }) => {
               }
             />
           ) : (
-            <Fragment>
-              <div className={"w-full flex flex-col gap-2"}>
-                {fetchDataEvent ? (
-                  <TabLogsFetchModal
-                    initialData={fetchInputData}
-                    onFinish={fetchData}
-                    onCancel={onFetchDataEventCompleted}
-                    gatewayList={vehicleGateway}
-                    deviceList={vehicleDeviceList}
-                  />
-                ) : null}
+            <div
+              className={
+                "w-full h-full relative overflow-x-hidden overflow-y-auto"
+              }
+            >
+              {fetchDataEvent ? (
+                <TabLogsFetchModal
+                  initialData={fetchInputData}
+                  onFinish={fetchData}
+                  onCancel={onFetchDataEventCompleted}
+                  gatewayList={vehicleGateway}
+                  deviceList={vehicleDeviceList}
+                />
+              ) : null}
+              <div
+                className={"flex flex-row justify-between items-center mb-4"}
+              >
                 <Button
                   type={"primary"}
                   ghost
@@ -144,9 +148,23 @@ export const VehicleLogsTab: FC<Props> = ({ vehicle }) => {
                 >
                   Seleccionar datos
                 </Button>
-                <TabLogsDataViewer deviceData={deviceData} />
               </div>
-            </Fragment>
+              {fetchInputData ? (
+                <div ref={divRef} className={"w-full overflow-x-hidden"}>
+                  <div
+                    className={"absolute top-0 right-0 p-3"}
+                    style={{ zIndex: 999 }}
+                  >
+                    <FullscreenToggle containerRef={divRef} />
+                  </div>
+                  <TabLogsDataViewer deviceData={deviceData} />
+                </div>
+              ) : (
+                <Typography.Text type={"secondary"}>
+                  Seleccione los datos a visualizar.
+                </Typography.Text>
+              )}
+            </div>
           )}
         </Fragment>
       )}

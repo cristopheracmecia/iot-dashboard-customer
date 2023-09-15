@@ -6,6 +6,7 @@ import { Card, Typography } from "antd";
 import { Line } from "@ant-design/plots";
 import { LineConfig } from "@ant-design/charts";
 import { formatDate } from "../../../../utils/Dates";
+import GridLayout from "react-grid-layout";
 
 type Props = {
   deviceData?: VehicleDeviceData[] | null;
@@ -26,15 +27,37 @@ export const TabLogsDataViewer: FC<Props> = ({ deviceData }) => {
 const ItemsRenderer: FC<{
   dataArray: VehicleDeviceData[];
 }> = ({ dataArray }) => {
+  const layout = dataArray.map((it, i) => {
+    return {
+      i: `${it.device.key}-rep`,
+      x: 0,
+      y: i === 0 ? 0 : i * 4,
+      w: 6,
+      h: 6,
+    };
+  });
   return (
     <div
       className={
-        "w-full h-full overflow-x-hidden overflow-y-auto grid grid-cols-2 gap-4"
+        "w-full overflow-x-hidden overflow-y-auto grid grid-cols-2 gap-4"
       }
     >
-      {dataArray.map((it, i) => (
-        <GraphicRenderer data={dataArray[i]} key={`${it.device.key}-rep`} />
-      ))}
+      <GridLayout
+        className="layout"
+        layout={layout}
+        cols={12}
+        rowHeight={40}
+        width={1200}
+      >
+        {dataArray.map((it, i) => (
+          <div
+            key={`${it.device.key}-rep`}
+            className={"w-full h-full overflow-hidden"}
+          >
+            <GraphicRenderer data={dataArray[i]} />
+          </div>
+        ))}
+      </GridLayout>
     </div>
   );
 };
@@ -70,13 +93,13 @@ const GraphicRenderer: FC<{
   };
 
   return (
-    <Card>
-      <div className={"w-full h-full border-2 border-black rounded"}>
+    <Card className={"h-full w-full"}>
+      <div
+        className={"w-full h-full border-2 border-black rounded flex flex-col"}
+      >
         <Typography.Title level={5}>{data.device.description}</Typography.Title>
         <Typography.Text>{data.device.key}</Typography.Text>
-        <div style={{ height: 400 }}>
-          <Line {...config} height={400} />
-        </div>
+        <Line {...config} />
       </div>
     </Card>
   );
