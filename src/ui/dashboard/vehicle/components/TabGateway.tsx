@@ -6,8 +6,6 @@ import {AppLoader} from "../../../components/AppLoader";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faAdd, faRefresh, faTrash} from "@fortawesome/free-solid-svg-icons";
 import {EmptyData} from "../../../components/Empty";
-import {AddVehicleGatewayModal} from "./ModalAddGateway";
-
 
 type Props = {
     vehicle: Vehicle
@@ -18,17 +16,11 @@ export const VehicleGatewayTab: FC<Props> = ({vehicle}) => {
         fetchGatewayState,
         fetchVehicleGateway,
         onFetchGatewayStateReceived,
-        addEvent,
-        requestAddEvent,
-        onAddEventComplete,
         fetchList,
         fetchListState,
         gatewayList,
-        assignVehicleGateway,
         vehicleGateway,
         onFetchListStateReceived,
-        updateGatewayState,
-        onUpdateGatewayStateReceived
     } = useGatewayViewModel()
     useEffect(() => {
         if (!!fetchGatewayState && !fetchGatewayState?.loading) {
@@ -52,22 +44,6 @@ export const VehicleGatewayTab: FC<Props> = ({vehicle}) => {
         }
     }, [fetchListState])
 
-    useEffect(() => {
-        if (!!updateGatewayState && !updateGatewayState.loading) {
-            if (updateGatewayState.hasError) {
-                notification.error({
-                    message: updateGatewayState.error?.message
-                })
-            } else {
-                notification.success({
-                    message: "Se ha asignado el gateway correctamente."
-                })
-            }
-            onAddEventComplete()
-            void fetchVehicleGatewayList()
-            onUpdateGatewayStateReceived()
-        }
-    }, [updateGatewayState])
 
     const fetchVehicleGatewayList = useCallback(() => {
         void fetchVehicleGateway(vehicle.id)
@@ -75,25 +51,17 @@ export const VehicleGatewayTab: FC<Props> = ({vehicle}) => {
 
     useEffect(() => {
         void fetchVehicleGatewayList()
-        void fetchList()
     }, [])
 
     return (
         <div className={"w-full h-full overflow-x-hidden overflow-y-auto"}>
-            {
-                addEvent ? <AddVehicleGatewayModal gatewayList={gatewayList} onFinish={assignVehicleGateway}
-                                                   onCancel={onAddEventComplete}
-                                                   vehicle={vehicle}/> : null
-            }
             <AppLoader
-                loading={!!fetchGatewayState?.loading || !!fetchListState?.loading || !!updateGatewayState?.loading}/>
+                loading={!!fetchGatewayState?.loading || !!fetchListState?.loading }/>
             <Typography.Title level={5}>Gateway</Typography.Title>
             <Typography.Text>Verifique el gateway ubicado en este vehículo</Typography.Text>
             <Button.Group className={"block my-2"}>
                 <Button type={"primary"} onClick={fetchVehicleGatewayList} ghost
                         icon={<FontAwesomeIcon icon={faRefresh}/>}>Actualizar</Button>
-                <Button onClick={requestAddEvent} type={"primary"} ghost
-                        icon={<FontAwesomeIcon icon={faAdd}/>}>Agregar</Button>
             </Button.Group>
             <div className={"overflow-y-auto"}>
                 {

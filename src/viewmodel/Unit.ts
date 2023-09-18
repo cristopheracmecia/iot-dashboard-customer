@@ -1,15 +1,13 @@
 import {useState} from "react";
 import {AppState, TaskState} from "../data/domain/State";
 import {useLoaderData} from "react-router-dom";
-import {NewUnitFormData, Unit, UpdateUnitFormData} from "../types/Unit";
+import {Unit} from "../types/Unit";
 import {UnitRepository} from "../data/repository/Unit";
 
 export function useUnitViewModel() {
     const initialUnit = useLoaderData() as Unit | null
     const [fetchListState, setFetchListState] = useState<AppState<boolean> | null>(null)
     const [unitList, setUnitList] = useState<Unit[] | null>(null)
-    const [createUnitState, setCreateUnitState] = useState<AppState<boolean> | null>(null)
-    const [updateUnitState, setUpdateUnitState] = useState<AppState<boolean> | null>(null)
     const [fetchUnitState, setFetchUnitState] = useState<AppState<boolean> | null>(null)
     const [unit, setUnit] = useState<Unit | null>(initialUnit)
 
@@ -29,47 +27,6 @@ export function useUnitViewModel() {
 
     function onFetchListStateReceived() {
         setFetchListState(null)
-    }
-
-    async function createUnit(data: NewUnitFormData) {
-        if (createUnitState?.loading) return
-        try {
-            const newCustomer = await UnitRepository.createUnit(data)
-            if (newCustomer.ok) {
-                setCreateUnitState(TaskState.success(true))
-                setUnitList([...(unitList ?? []), newCustomer.data!!])
-            } else {
-                setCreateUnitState(TaskState.error(new Error(newCustomer.message!!)))
-            }
-        } catch (error: any) {
-            setCreateUnitState(TaskState.error(error))
-        }
-    }
-
-    function onCreateUnitStateReceived() {
-        setCreateUnitState(null)
-    }
-
-    async function updateUnit(data: UpdateUnitFormData) {
-        if (updateUnitState?.loading) return
-        setUpdateUnitState(TaskState.loading())
-        if (!unit) setUpdateUnitState(TaskState.error(new Error("No unit data")))
-        try {
-            const updateVehicle = await UnitRepository.updateUnit(unit!!.id, data)
-            if (updateVehicle.ok) {
-                setUpdateUnitState(TaskState.success(true))
-                const newList = unitList?.filter(c => c.id !== updateVehicle.data!!.old.id) ?? []
-                setUnitList([...newList, updateVehicle.data!!.data])
-            } else {
-                setUpdateUnitState(TaskState.error(new Error(updateVehicle.message!!)))
-            }
-        } catch (e: any) {
-            setUpdateUnitState(TaskState.error(e))
-        }
-    }
-
-    function onUpdateUnitStateReceived() {
-        setUpdateUnitState(null)
     }
 
     async function fetchUnit(id: number) {
@@ -97,12 +54,6 @@ export function useUnitViewModel() {
         unitList,
         fetchList,
         onFetchListStateReceived,
-        createUnitState,
-        createUnit,
-        onCreateUnitStateReceived,
-        updateUnitState,
-        updateUnit,
-        onUpdateUnitStateReceived,
         fetchUnitState,
         fetchUnit,
         onFetchUnitStateReceived,

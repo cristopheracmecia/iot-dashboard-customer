@@ -12,20 +12,15 @@ import {Vehicle} from "../../../types/Vehicle";
 import {AppLoader} from "../../components/AppLoader";
 
 export const DashboardVehicleListPage: FC = () => {
-    const params = useParams<Record<string, any>>()
     const {
         fetchList, vehicleList, fetchListState, onFetchListStateReceived
     } = useVehicleViewModel()
 
     const fetchVehicleList = useCallback(() => {
-        void fetchList(params.id)
-    }, [params.id, fetchList])
+        void fetchList()
+    }, [fetchList])
 
     const navigate = useNavigate()
-
-    const onNewVehicleClick = useCallback(() => {
-        navigate("/dashboard/vehicles/create")
-    }, [navigate])
 
     const onItemClicked = useCallback((record: Vehicle) => {
 
@@ -51,7 +46,6 @@ export const DashboardVehicleListPage: FC = () => {
         <DashboardSubpageHeader title={"Vehículos"} subtitle={`${vehicleList?.length} vehículos`} extra={<Button.Group>
             <Button type={"primary"} icon={<FontAwesomeIcon icon={faRefresh}/>}
                     onClick={fetchVehicleList}>Actualizar</Button>
-            <Button type={"dashed"} icon={<FontAwesomeIcon icon={faPlus}/>} onClick={onNewVehicleClick}>Nuevo</Button>
         </Button.Group>}/>
         <div className={"w-full h-full"}>
             <VehicleListData data={vehicleList} onItemClicked={onItemClicked}/>

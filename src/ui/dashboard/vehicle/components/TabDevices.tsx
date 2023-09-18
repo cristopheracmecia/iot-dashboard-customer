@@ -6,7 +6,6 @@ import {EmptyData} from "../../../components/Empty";
 import {AppLoader} from "../../../components/AppLoader";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faAdd, faRefresh, faTrash} from "@fortawesome/free-solid-svg-icons";
-import {AddVehicleDeviceModal} from "./ModalAddDevice";
 import {useDeviceViewModel} from "../../../../viewmodel/Device";
 
 type Props = {
@@ -18,13 +17,9 @@ export const VehicleDevicesTab: FC<Props> = ({
                                              }) => {
     const {
         vehicleDeviceList,
-        createVehicleDevice,
-        createVehicleDeviceState,
-        onCreateVehicleDeviceStateReceived,
         onFetchListStateReceived,
         fetchListState,
         fetchList,
-        addEvent, requestAddEvent, onAddEventCompleted
     } = useVehicleDeviceViewModel()
 
     const {
@@ -65,38 +60,14 @@ export const VehicleDevicesTab: FC<Props> = ({
         }
     }, [fetchDeviceListState])
 
-    useEffect(() => {
-        if (!!createVehicleDeviceState && !createVehicleDeviceState.loading) {
-            if (createVehicleDeviceState.hasError) {
-                notification.error({
-                    message: createVehicleDeviceState.error?.message
-                })
-            } else {
-                notification.success({
-                    message: "Dispositivo registrado correctamente."
-                })
-                void fetchVehicleDeviceList()
-            }
-            onCreateVehicleDeviceStateReceived()
-            onAddEventCompleted()
-        }
-    }, [createVehicleDeviceState])
-
     return (
         <div className={"w-full h-full overflow-x-hidden overflow-y-auto"}>
-            {
-                addEvent ?
-                    <AddVehicleDeviceModal deviceList={deviceList} vehicle={vehicle} onCancel={onAddEventCompleted}
-                                           onFinish={createVehicleDevice}/> : null
-            }
             <AppLoader loading={!!fetchListState?.loading}/>
             <Typography.Title level={5}>Dispositivos</Typography.Title>
             <Typography.Text>Dispositivos disponibles para el vehículo.</Typography.Text>
             <Button.Group className={"block my-2"}>
                 <Button type={"primary"} onClick={fetchVehicleDeviceList} ghost
                         icon={<FontAwesomeIcon icon={faRefresh}/>}>Actualizar</Button>
-                <Button onClick={requestAddEvent} type={"primary"} ghost
-                        icon={<FontAwesomeIcon icon={faAdd}/>}>Agregar</Button>
             </Button.Group>
             <div className={"overflow-y-auto"}>
                 {

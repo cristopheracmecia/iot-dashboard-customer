@@ -1,7 +1,7 @@
 import {RemoteSourceResponse} from "../../../types/Source";
 import {apiService} from "../../../services/RemoteClient";
 import {BaseRemoteSource} from "../base/Remote";
-import {DeleteRoleData, NewRoleData, Role, UpdateRoleData} from "../../../types/Role";
+import {Role} from "../../../types/Role";
 
 export class RemoteRoleSource extends BaseRemoteSource {
     static async getRole(id: number): Promise<RemoteSourceResponse<Role> | undefined> {
@@ -21,36 +21,5 @@ export class RemoteRoleSource extends BaseRemoteSource {
             return roleList.data as RemoteSourceResponse<Role[]>;
         } catch (e) {
             this.parseError(e)
-        }
-    }
-
-    static async createRole(data: NewRoleData) {
-        try {
-            const response = await apiService.postWithAuth("/role/create", data)
-            this.checkResponseCredentials(response)
-            return response.data as RemoteSourceResponse
-        } catch (e) {
-            this.parseError(e)
-        }
-    }
-
-    static async deleteRole(data: DeleteRoleData) {
-        try {
-            const response = await apiService.postWithAuth("/role/delete", data)
-            this.checkResponseCredentials(response)
-            return response.data as RemoteSourceResponse
-        } catch (e) {
-            this.parseError(e)
-        }
-    }
-
-    static async updateRole(data: UpdateRoleData) {
-        try {
-            const response = await apiService.putWithAuth("/role/update", data)
-            this.checkResponseCredentials(response)
-            return response.data as RemoteSourceResponse
-        } catch (e) {
-            this.parseError(e)
-        }
-    }
+        }}
 }

@@ -1,10 +1,12 @@
 import { RemoteUserSource } from "../source/user/Remote";
 import { NewUserFormData, UpdateUserFormData } from "../../types/User";
 import { omit } from "lodash";
+import {AuthRepository} from "./Auth";
 
 export class UserRepository {
   static async getUserList() {
-    return await RemoteUserSource.getUserList();
+    console.log(AuthRepository.getCurrentUser())
+    return await RemoteUserSource.getUserList(AuthRepository.getCurrentUser()!!.Customer.id);
   }
 
   static async getUser(id: number) {

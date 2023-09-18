@@ -1,5 +1,6 @@
 import { Role } from "./Role";
 import { ActivityData } from "./App";
+import {Customer} from "./Customer";
 
 export type User = {
   id: number;
@@ -14,6 +15,8 @@ export type User = {
   birthDate?: Date;
   Role: Role;
   enabled: boolean;
+
+  Customer: Customer
 };
 
 type NewUserD = {

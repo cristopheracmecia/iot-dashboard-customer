@@ -1,20 +1,19 @@
 import {useState} from "react";
 import {AppState, TaskState} from "../data/domain/State";
-import {NewVehicleFormData, UpdateVehicleFormData, Vehicle} from "../types/Vehicle";
+import {UpdateVehicleFormData, Vehicle} from "../types/Vehicle";
 import {VehicleRepository} from "../data/repository/Vehicle";
 
 export function useVehicleViewModel() {
     const [fetchListState, setFetchListState] = useState<AppState<boolean> | null>(null)
     const [vehicleList, setVehicleList] = useState<Vehicle[]    | null>(null)
-    const [createVehicleState, setCreateVehicleState] = useState<AppState<boolean> | null>(null)
     const [updateVehicleState, setUpdateVehicleState] = useState<AppState<boolean> | null>(null)
     const [fetchVehicleState, setFetchVehicleState] = useState<AppState<boolean> | null>(null)
     const [vehicle, setVehicle] = useState<Vehicle | null>()
-    async function fetchList(id: number | undefined) {
+    async function fetchList() {
         if(fetchListState?.loading) return
         setFetchListState(TaskState.loading())
         try {
-           const list = await VehicleRepository.getVehicleList(id)
+           const list = await VehicleRepository.getVehicleList()
            if(list.ok) {
                setVehicleList(list.data!!)
                 setFetchListState(TaskState.success(true))
@@ -27,26 +26,6 @@ export function useVehicleViewModel() {
 
     function onFetchListStateReceived() {
         setFetchListState(null)
-    }
-
-    async function createVehicle(vehicle: NewVehicleFormData) {
-        if(createVehicleState?.loading) return
-        setCreateVehicleState(TaskState.loading())
-        try {
-            const newCustomer = await VehicleRepository.createVehicle(vehicle)
-            if(newCustomer.ok) {
-                setCreateVehicleState(TaskState.success(true))
-                setVehicleList([...(vehicleList ?? []), newCustomer.data!!])
-            } else {
-                setCreateVehicleState(TaskState.error(new Error(newCustomer.message!!)))
-            }
-        } catch (error: any) {
-            setCreateVehicleState(TaskState.error(error))
-        }
-    }
-
-    function onCreateVehicleStateReceived() {
-        setCreateVehicleState(null)
     }
 
     async function updateVehicle(data: UpdateVehicleFormData) {
@@ -96,9 +75,6 @@ export function useVehicleViewModel() {
         vehicleList,
         fetchList,
         onFetchListStateReceived,
-        createVehicleState,
-        createVehicle,
-        onCreateVehicleStateReceived,
         updateVehicleState,
         updateVehicle,
         onUpdateVehicleStateReceived,

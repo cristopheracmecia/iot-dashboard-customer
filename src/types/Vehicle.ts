@@ -16,24 +16,8 @@ export type Vehicle = {
     Customer: Customer
 }
 
-export type NewVehicleFormData = {
-    name: string
-    plate: string
-    brand: string
-    model?: string
-    description?: string
-    customerId?: number
-    reason: string
-}
-
-export type NewVehicle = ActivityData<Omit<NewVehicleFormData, "reason">>
-
 export type UpdateVehicleFormData = {
-    name?: string
-    plate?: string
-    brand?: string
-    model?: string
-    description?: string
+    enabled?: boolean
     reason: string
 }
 

@@ -10,45 +10,21 @@ import {
   faChartSimple,
   faMagnifyingGlassChart,
   faMapLocation,
-  faPeopleGroup,
-  faRuler,
-  faSatelliteDish,
   faTruck,
   faUserGroup,
   faHomeAlt,
-  faUserGear,
-  faUsersGear,
   faUsersLine,
-  faServer,
 } from "@fortawesome/free-solid-svg-icons";
 import { DashboardUserListPage } from "../ui/dashboard/user_list/UserList";
 import { DashboardUserCreatePage } from "../ui/dashboard/user_create/UserCreate";
-import { DashboardUserRolesPage } from "../ui/dashboard/user_roles/UserRoles";
-import { DashboardRolePermissionsListPage } from "../ui/dashboard/role_permissions/main/RolePermissions";
-import { DashboardRolePermissionPage } from "../ui/dashboard/role_permissions/role/RolePermission";
-import { PermissionRepository } from "../data/repository/Permission";
-import { DashboardCustomerListPage } from "../ui/dashboard/customer_list/CustomerList";
-import { DashboardCustomerCreatePage } from "../ui/dashboard/customer_create/CustomerCreate";
 import { DashboardVehicleListPage } from "../ui/dashboard/vehicle_list/VehicleList";
-import { DashboardVehicleCreatePage } from "../ui/dashboard/vehicle_create/VehicleCreate";
-import { DashboardUnitListPage } from "../ui/dashboard/unit_list/UnitList";
-import { DashboardUnitCreatePage } from "../ui/dashboard/unit_create/UnitCreate";
-import { DashboardDeviceListPage } from "../ui/dashboard/device_list/DeviceList";
-import { DashboardDeviceCreatePage } from "../ui/dashboard/device_create/DeviceCreate";
 import { DashboardOverviewPage } from "../ui/dashboard/overview/DashboardOverview";
-import { DashboardGatewayListPage } from "../ui/dashboard/gateway_list/GatewayList";
-import { DashboardGatewayCreatePage } from "../ui/dashboard/gateway_create/GatewayCreate";
 import { Button, Layout, Result } from "antd";
 import { DashboardVehiclePage } from "../ui/dashboard/vehicle/Vehicle";
 import { LoadingError } from "../ui/components/LoadingError";
 import { DashboardUserPage } from "../ui/dashboard/user/User";
 import { toNumber } from "lodash";
 import { DashboardUserUpdatePage } from "../ui/dashboard/user_update/UserUpdate";
-import { DashboardCustomerPage } from "../ui/dashboard/customer/Customer";
-import { DashboardCustomerUpdatePage } from "../ui/dashboard/customer_update/CustomerUpdate";
-import { DashboardDeviceUpdatePage } from "../ui/dashboard/device_update/DeviceUpdate";
-import { DashboardUnitUpdatePage } from "../ui/dashboard/unit_update/UnitUpdate";
-import { DashboardGatewayUpdatePage } from "../ui/dashboard/gateway_update/GatewayUpdate";
 import { MainLayout } from "../ui/layouts/MainLayout";
 
 export const AppRoutes: AppRoute[] = [
@@ -140,119 +116,6 @@ export const AppRoutes: AppRoute[] = [
               });
             },
           },
-          {
-            path: "/dashboard/users/roles",
-            element: <DashboardUserRolesPage />,
-            info: {
-              label: "Roles",
-              icon: <FontAwesomeIcon icon={faUsersGear} />,
-            },
-          },
-          {
-            path: "/dashboard/users/permissions",
-            element: <Outlet />,
-            info: {
-              label: "Permisos",
-              icon: <FontAwesomeIcon icon={faUserGear} />,
-            },
-            children: [
-              {
-                path: "/dashboard/users/permissions/",
-                element: <DashboardRolePermissionsListPage />,
-                info: {
-                  ignore: true,
-                },
-              },
-              {
-                path: "/dashboard/users/permissions/:id",
-                element: <DashboardRolePermissionPage />,
-                info: {
-                  label: "Permisos",
-                  ignore: true,
-                },
-                loader: async (c) => {
-                  const { id } = c.params;
-                  const pR = await PermissionRepository.getRolePermissions(
-                    Number.parseInt(id!!),
-                  );
-                  return pR!!.data;
-                },
-              },
-            ],
-          },
-        ],
-      },
-
-      {
-        path: "/dashboard/customers",
-        element: <Outlet />,
-        info: {
-          label: "Clientes",
-          icon: <FontAwesomeIcon icon={faPeopleGroup} />,
-        },
-        children: [
-          {
-            path: "/dashboard/customers/all",
-            element: <Outlet />,
-            info: {
-              label: "Clientes",
-              icon: <FontAwesomeIcon icon={faUserGroup} />,
-            },
-            children: [
-              {
-                path: "/dashboard/customers/all/",
-                element: <DashboardCustomerListPage />,
-                errorElement: <LoadingError />,
-                info: {
-                  label: "Clientes",
-                  ignore: true,
-                },
-              },
-              {
-                path: "/dashboard/customers/all/:id",
-                element: <DashboardCustomerPage />,
-                errorElement: <LoadingError />,
-                info: {
-                  label: "Cliente",
-                  ignore: true,
-                },
-                loader: async (c) => {
-                  const { id } = c.params;
-                  return await new Promise<boolean>((resolve, reject) => {
-                    if (isNaN(toNumber(id)))
-                      reject(new Error("El id no es válido."));
-                    else resolve(false);
-                  });
-                },
-              },
-            ],
-          },
-          {
-            path: "/dashboard/customers/create",
-            element: <DashboardCustomerCreatePage />,
-            info: {
-              label: "Crear Cliente",
-              ignore: true,
-            },
-            errorElement: <LoadingError />,
-          },
-          {
-            path: "/dashboard/customers/edit/:id",
-            errorElement: <LoadingError />,
-            element: <DashboardCustomerUpdatePage />,
-            info: {
-              label: "Editar Cliente",
-              ignore: true,
-            },
-            loader: async (c) => {
-              const { id } = c.params;
-              return await new Promise<boolean>((resolve, reject) => {
-                if (isNaN(toNumber(id)))
-                  reject(new Error("El id no es válido."));
-                else resolve(false);
-              });
-            },
-          },
         ],
       },
       {
@@ -268,14 +131,6 @@ export const AppRoutes: AppRoute[] = [
             element: <DashboardVehicleListPage />,
             info: {
               label: "Vehículos",
-              ignore: true,
-            },
-          },
-          {
-            path: "/dashboard/vehicles/create*",
-            element: <DashboardVehicleCreatePage />,
-            info: {
-              label: "Crear Vehículo",
               ignore: true,
             },
           },
@@ -305,132 +160,6 @@ export const AppRoutes: AppRoute[] = [
           label: "Tracking",
           icon: <FontAwesomeIcon icon={faMapLocation} />,
         },
-      },
-      {
-        path: "/dashboard/units",
-        element: <Outlet />,
-        info: {
-          label: "Unidades",
-          icon: <FontAwesomeIcon icon={faRuler} />,
-        },
-        children: [
-          {
-            path: "/dashboard/units/",
-            element: <DashboardUnitListPage />,
-            info: {
-              label: "Unidades",
-              ignore: true,
-            },
-          },
-          {
-            path: "/dashboard/units/create",
-            element: <DashboardUnitCreatePage />,
-            info: {
-              label: "Crear Unidad",
-              ignore: true,
-            },
-          },
-          {
-            path: "/dashboard/units/:id",
-            element: <DashboardUnitUpdatePage />,
-            info: {
-              label: "Editar Unidad",
-              ignore: true,
-            },
-            loader: async (c) => {
-              const { id } = c.params;
-              return await new Promise<boolean>((resolve, reject) => {
-                if (isNaN(toNumber(id)))
-                  reject(new Error("El id no es válido."));
-                else resolve(false);
-              });
-            },
-          },
-        ],
-      },
-      {
-        path: "/dashboard/gateways",
-        element: <Outlet />,
-        info: {
-          label: "Gateways",
-          icon: <FontAwesomeIcon icon={faServer} />,
-        },
-        children: [
-          {
-            path: "/dashboard/gateways/",
-            element: <DashboardGatewayListPage />,
-            info: {
-              label: "Gateways",
-              ignore: true,
-            },
-          },
-          {
-            path: "/dashboard/gateways/create",
-            element: <DashboardGatewayCreatePage />,
-            info: {
-              label: "Añadir Gateway",
-              ignore: true,
-            },
-          },
-          {
-            path: "/dashboard/gateways/:id",
-            element: <DashboardGatewayUpdatePage />,
-            info: {
-              label: "Editar Gateway",
-              ignore: true,
-            },
-            loader: async (c) => {
-              const { id } = c.params;
-              return await new Promise<boolean>((resolve, reject) => {
-                if (isNaN(toNumber(id)))
-                  reject(new Error("El id no es válido."));
-                else resolve(false);
-              });
-            },
-          },
-        ],
-      },
-      {
-        path: "/dashboard/devices",
-        element: <Outlet />,
-        info: {
-          label: "Dispositivos",
-          icon: <FontAwesomeIcon icon={faSatelliteDish} />,
-        },
-        children: [
-          {
-            path: "/dashboard/devices/",
-            element: <DashboardDeviceListPage />,
-            info: {
-              label: "Dispositivos",
-              ignore: true,
-            },
-          },
-          {
-            path: "/dashboard/devices/create",
-            element: <DashboardDeviceCreatePage />,
-            info: {
-              label: "Crear Dispositivo",
-              ignore: true,
-            },
-          },
-          {
-            path: "/dashboard/devices/:id",
-            element: <DashboardDeviceUpdatePage />,
-            info: {
-              label: "Editar Dispositivo",
-              ignore: true,
-            },
-            loader: async (c) => {
-              const { id } = c.params;
-              return await new Promise<boolean>((resolve, reject) => {
-                if (isNaN(toNumber(id)))
-                  reject(new Error("El id no es válido."));
-                else resolve(false);
-              });
-            },
-          },
-        ],
       },
       {
         path: "/dashboard/reports",

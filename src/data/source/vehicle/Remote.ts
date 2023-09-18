@@ -1,6 +1,6 @@
 import {RemoteSourceResponse, UpdateResult} from "../../../types/Source";
 import {
-    NewVehicle, UpdateVehicle,
+    UpdateVehicle,
     Vehicle
 } from "../../../types/Vehicle";
 import {apiService} from "../../../services/RemoteClient";
@@ -19,19 +19,9 @@ export class RemoteVehicleSource extends BaseRemoteSource {
 
     static async getAllVehicles(customerId: number | undefined): Promise<RemoteSourceResponse<Vehicle[]>> {
         try {
-            const vehicleList = await apiService.getWithAuth("/vehicle/list", {id: customerId});
+            const vehicleList = await apiService.postWithAuth("/vehicle/list", {customerId});
             this.checkResponseCredentials(vehicleList);
             return vehicleList.data as RemoteSourceResponse<Vehicle[]>;
-        } catch (e) {
-            throw this.parseError(e)
-        }
-    }
-
-    static async createVehicle(data: NewVehicle) : Promise<RemoteSourceResponse<Vehicle>> {
-        try {
-            const response = await apiService.postWithAuth("/vehicle/create", data)
-            this.checkResponseCredentials(response)
-            return response.data as RemoteSourceResponse<Vehicle>
         } catch (e) {
             throw this.parseError(e)
         }
